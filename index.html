@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Sultan platform</title>
+    <title>Sultan platform pro</title>
     
 
   </head>
@@ -15,6 +15,10 @@
 
 <head>
 
+    <meta name="google-site-verification" content="vcn0cLXxHdzBrBGqavKONrne7UWzj0OOF3tdRlTo6Ig" />
+
+    
+
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,11 +27,11 @@
 
     <title>سلطان لتطوير المواقع | إنشاء تطبيقات وبرامج احترافية</title>
 
-    <meta name="description" content="منصة سلطان لبرمجة وتصميم المواقع الإلكترونية والتطبيقات بأحدث التقنيات. اطلب موقعك الآن وتواصل مع المبرمج مباشرة عبر الشات الخاص.">
+    <meta name="description" content="منصة سلطان لبرمجة وتصميم المواقع الإلكترونية والتطبيقات بأحدث التقنيات. تواصل مع المبرمج سلطان مباشرة وابدأ مشروعك الآن.">
 
-    <meta name="keywords" content="إنشاء مواقع, برمجة تطبيقات, سلطان مبرمج, تصميم موقع الكتروني, تطوير برمجيات">
+    <meta name="keywords" content="سلطان مبرمج, إنشاء مواقع, برمجة تطبيقات, تصميم موقع الكتروني, Sultan Dev">
 
-    
+    <meta name="author" content="Sultan Dev">
 
     <style>
 
@@ -35,31 +39,53 @@
 
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: white; margin: 0; overflow: hidden; }
 
+        
+
+        /* شاشات الغطاء */
+
         .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
 
         .box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--border); text-align: center; width: 320px; box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+
+        
 
         .main-layout { display: grid; grid-template-columns: 280px 1fr; height: 100vh; visibility: hidden; }
 
         .sidebar { background: var(--card); border-left: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
 
-        .nav-btn { background: #1a1a1a; border: 1px solid var(--border); color: #888; padding: 12px; border-radius: 8px; cursor: pointer; text-align: right; }
+        
+
+        .nav-btn { background: #1a1a1a; border: 1px solid var(--border); color: #888; padding: 12px; border-radius: 8px; cursor: pointer; text-align: right; transition: 0.3s; }
 
         .nav-btn.active { border-color: var(--primary); color: var(--primary); background: rgba(0,255,136,0.05); }
 
+        
+
+        .chat-container { display: flex; flex-direction: column; background: var(--bg); }
+
         .messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
 
-        .msg { max-width: 75%; padding: 10px 15px; border-radius: 12px; font-size: 14px; }
+        
+
+        .msg { max-width: 75%; padding: 10px 15px; border-radius: 12px; font-size: 14px; position: relative; }
 
         .received { background: #1a1a1a; align-self: flex-start; border: 1px solid var(--border); }
 
         .sent { background: var(--primary); color: black; align-self: flex-end; font-weight: bold; }
 
+        
+
         input { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; outline: none; margin-bottom: 10px; box-sizing: border-box; }
 
-        button { background: var(--primary); color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        button { background: var(--primary); color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+
+        button:hover { opacity: 0.8; }
+
+        
 
         .hidden { display: none !important; }
+
+        #auth-error { color: #ff4444; font-size: 11px; margin-top: 10px; }
 
     </style>
 
@@ -71,17 +97,17 @@
 
         <div class="box">
 
-            <h2 style="color: var(--primary)">SULTAN DEV</h2>
+            <h2 style="color: var(--primary); margin-bottom: 5px;">SULTAN DEV</h2>
 
-            <p style="font-size: 12px; color: #666;">سجل دخولك لبدء إنشاء موقعك</p>
+            <p style="font-size: 12px; color: #666; margin-bottom: 20px;">منصة المراسلة وتطوير الأعمال</p>
 
             <input type="email" id="email" placeholder="البريد الإلكتروني">
 
             <input type="password" id="pass" placeholder="كلمة المرور">
 
-            <button id="authBtn">دخول / تسجيل</button>
+            <button id="authBtn">دخول / إنشاء حساب</button>
 
-            <p id="auth-error" style="color:red; font-size:11px; margin-top:10px;"></p>
+            <p id="auth-error"></p>
 
         </div>
 
@@ -93,11 +119,11 @@
 
             <h2 style="color: var(--primary)">مرحباً بك</h2>
 
-            <p>ما هو الاسم الذي تفضله؟</p>
+            <p style="font-size: 14px; color: #888;">اختر اسماً ليظهر في المحادثات</p>
 
-            <input type="text" id="nameInput" placeholder="اكتب اسمك هنا...">
+            <input type="text" id="nameInput" placeholder="اسمك الكريم...">
 
-            <button onclick="saveName()">بدء الدردشة</button>
+            <button onclick="saveName()">بدء الاستخدام</button>
 
         </div>
 
@@ -107,25 +133,27 @@
 
         <div class="sidebar">
 
-            <h3 style="color: var(--primary)">القنوات</h3>
+            <h3 style="color: var(--primary); font-size: 14px; letter-spacing: 1px;">DASHBOARD</h3>
 
             <button class="nav-btn active" id="privateBtn" onclick="switchTab('private')">🔒 شات خاص مع سلطان</button>
 
             <button class="nav-btn" id="publicBtn" onclick="switchTab('public')">🌐 الشات العام</button>
 
-            <button onclick="logout()" style="margin-top:auto; background:#222; color:#ff4444;">تسجيل خروج</button>
+            <button onclick="logout()" style="margin-top: auto; background: #1a1a1a; color: #ff4444; border: 1px solid #333;">تسجيل خروج</button>
 
         </div>
 
-        <div style="display:flex; flex-direction:column; background:var(--bg);">
+        
+
+        <div class="chat-container">
 
             <div class="messages" id="msgArea"></div>
 
-            <div style="padding:20px; display:flex; gap:10px; background:var(--card);">
+            <div style="padding: 20px; display: flex; gap: 10px; background: var(--card);">
 
-                <input type="text" id="msgInput" placeholder="اكتب رسالتك هنا...">
+                <input type="text" id="msgInput" placeholder="اكتب رسالتك هنا..." style="margin-bottom: 0;">
 
-                <button id="sendBtn" style="width:auto; padding: 0 30px;">إرسال</button>
+                <button id="sendBtn" style="width: auto; padding: 0 30px;">إرسال</button>
 
             </div>
 
@@ -140,6 +168,8 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // إعدادات Firebase الخاصة بمشروعك
 
         const firebaseConfig = {
 
@@ -163,7 +193,15 @@
 
         const db = getFirestore(app);
 
-        let currentUser = null; let displayName = ""; let tab = "private"; let unsub = null;
+        let currentUser = null;
+
+        let displayName = "";
+
+        let tab = "private";
+
+        let unsub = null;
+
+        // نظام تسجيل الدخول
 
         document.getElementById('authBtn').onclick = async () => {
 
@@ -171,19 +209,31 @@
 
             const pass = document.getElementById('pass').value;
 
+            const errBox = document.getElementById('auth-error');
+
+            errBox.innerText = "جاري التحقق...";
+
             try {
 
                 await signInWithEmailAndPassword(auth, email, pass);
 
-            } catch (e) {
+            } catch (error) {
 
-                try { await createUserWithEmailAndPassword(auth, email, pass); }
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
 
-                catch (err) { document.getElementById('auth-error').innerText = "خطأ: تأكد من البيانات"; }
+                    try {
+
+                        await createUserWithEmailAndPassword(auth, email, pass);
+
+                    } catch (regErr) { errBox.innerText = "خطأ في التسجيل: " + regErr.message; }
+
+                } else { errBox.innerText = "خطأ: " + error.message; }
 
             }
 
         };
+
+        // متابعة حالة المستخدم
 
         onAuthStateChanged(auth, async (user) => {
 
@@ -219,6 +269,8 @@
 
         });
 
+        // حفظ الاسم الأول مرة
+
         window.saveName = async () => {
 
             const name = document.getElementById('nameInput').value;
@@ -227,7 +279,15 @@
 
                 displayName = name;
 
-                await setDoc(doc(db, "users", currentUser.uid), { name: name, email: currentUser.email, uid: currentUser.uid });
+                await setDoc(doc(db, "users", currentUser.uid), { 
+
+                    name: name, 
+
+                    email: currentUser.email, 
+
+                    uid: currentUser.uid 
+
+                });
 
                 document.getElementById('name-screen').classList.add('hidden');
 
@@ -259,6 +319,8 @@
 
         };
 
+        // إرسال الرسائل
+
         document.getElementById('sendBtn').onclick = async () => {
 
             const txt = document.getElementById('msgInput').value;
@@ -267,13 +329,23 @@
 
                 const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
 
-                await addDoc(collection(db, col), { sender: displayName, text: txt, time: new Date() });
+                await addDoc(collection(db, col), { 
+
+                    sender: displayName, 
+
+                    text: txt, 
+
+                    time: new Date() 
+
+                });
 
                 document.getElementById('msgInput').value = "";
 
             }
 
         };
+
+        // عرض الرسائل
 
         function loadMessages() {
 
@@ -293,9 +365,15 @@
 
                     const data = d.data();
 
-                    area.innerHTML += `<div class="msg ${data.sender === displayName ? 'sent' : 'received'}">
+                    const isMe = data.sender === displayName;
 
-                        <small style="display:block; font-size:10px; opacity:0.5">${data.sender}</small>${data.text}</div>`;
+                    area.innerHTML += `<div class="msg ${isMe ? 'sent' : 'received'}">
+
+                        <small style="display:block; font-size:10px; opacity:0.5; margin-bottom:3px;">${data.sender}</small>
+
+                        ${data.text}
+
+                    </div>`;
 
                 });
 
