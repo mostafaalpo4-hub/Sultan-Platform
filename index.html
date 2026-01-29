@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Sultan platform</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+
+    <title>سلطان لتطوير المواقع | إنشاء تطبيقات وبرامج احترافية</title>
+
+    <meta name="description" content="منصة سلطان لبرمجة وتصميم المواقع الإلكترونية والتطبيقات بأحدث التقنيات. اطلب موقعك الآن وتواصل مع المبرمج مباشرة عبر الشات الخاص.">
+
+    <meta name="keywords" content="إنشاء مواقع, برمجة تطبيقات, سلطان مبرمج, تصميم موقع الكتروني, تطوير برمجيات">
+
+    
+
+    <style>
+
+        :root { --primary: #00ff88; --bg: #0a0a0a; --card: #111; --border: #222; }
+
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: white; margin: 0; overflow: hidden; }
+
+        .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+
+        .box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--border); text-align: center; width: 320px; box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+
+        .main-layout { display: grid; grid-template-columns: 280px 1fr; height: 100vh; visibility: hidden; }
+
+        .sidebar { background: var(--card); border-left: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+
+        .nav-btn { background: #1a1a1a; border: 1px solid var(--border); color: #888; padding: 12px; border-radius: 8px; cursor: pointer; text-align: right; }
+
+        .nav-btn.active { border-color: var(--primary); color: var(--primary); background: rgba(0,255,136,0.05); }
+
+        .messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+
+        .msg { max-width: 75%; padding: 10px 15px; border-radius: 12px; font-size: 14px; }
+
+        .received { background: #1a1a1a; align-self: flex-start; border: 1px solid var(--border); }
+
+        .sent { background: var(--primary); color: black; align-self: flex-end; font-weight: bold; }
+
+        input { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; outline: none; margin-bottom: 10px; box-sizing: border-box; }
+
+        button { background: var(--primary); color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+
+        .hidden { display: none !important; }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="auth-screen" class="overlay">
+
+        <div class="box">
+
+            <h2 style="color: var(--primary)">SULTAN DEV</h2>
+
+            <p style="font-size: 12px; color: #666;">سجل دخولك لبدء إنشاء موقعك</p>
+
+            <input type="email" id="email" placeholder="البريد الإلكتروني">
+
+            <input type="password" id="pass" placeholder="كلمة المرور">
+
+            <button id="authBtn">دخول / تسجيل</button>
+
+            <p id="auth-error" style="color:red; font-size:11px; margin-top:10px;"></p>
+
+        </div>
+
+    </div>
+
+    <div id="name-screen" class="overlay hidden">
+
+        <div class="box">
+
+            <h2 style="color: var(--primary)">مرحباً بك</h2>
+
+            <p>ما هو الاسم الذي تفضله؟</p>
+
+            <input type="text" id="nameInput" placeholder="اكتب اسمك هنا...">
+
+            <button onclick="saveName()">بدء الدردشة</button>
+
+        </div>
+
+    </div>
+
+    <div class="main-layout" id="mainApp">
+
+        <div class="sidebar">
+
+            <h3 style="color: var(--primary)">القنوات</h3>
+
+            <button class="nav-btn active" id="privateBtn" onclick="switchTab('private')">🔒 شات خاص مع سلطان</button>
+
+            <button class="nav-btn" id="publicBtn" onclick="switchTab('public')">🌐 الشات العام</button>
+
+            <button onclick="logout()" style="margin-top:auto; background:#222; color:#ff4444;">تسجيل خروج</button>
+
+        </div>
+
+        <div style="display:flex; flex-direction:column; background:var(--bg);">
+
+            <div class="messages" id="msgArea"></div>
+
+            <div style="padding:20px; display:flex; gap:10px; background:var(--card);">
+
+                <input type="text" id="msgInput" placeholder="اكتب رسالتك هنا...">
+
+                <button id="sendBtn" style="width:auto; padding: 0 30px;">إرسال</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyCRRykMJG9x2QjXL7zvr5bFHExaLgbvK8o",
+
+            authDomain: "bot-trading-175e2.firebaseapp.com",
+
+            projectId: "bot-trading-175e2",
+
+            storageBucket: "bot-trading-175e2.firebasestorage.app",
+
+            messagingSenderId: "258267116344",
+
+            appId: "1:258267116344:web:096d5e348c75c9764207cd"
+
+        };
+
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+
+        const db = getFirestore(app);
+
+        let currentUser = null; let displayName = ""; let tab = "private"; let unsub = null;
+
+        document.getElementById('authBtn').onclick = async () => {
+
+            const email = document.getElementById('email').value;
+
+            const pass = document.getElementById('pass').value;
+
+            try {
+
+                await signInWithEmailAndPassword(auth, email, pass);
+
+            } catch (e) {
+
+                try { await createUserWithEmailAndPassword(auth, email, pass); }
+
+                catch (err) { document.getElementById('auth-error').innerText = "خطأ: تأكد من البيانات"; }
+
+            }
+
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+
+            if (user) {
+
+                currentUser = user;
+
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+
+                if (userDoc.exists()) {
+
+                    displayName = userDoc.data().name;
+
+                    document.getElementById('auth-screen').classList.add('hidden');
+
+                    showApp();
+
+                } else {
+
+                    document.getElementById('auth-screen').classList.add('hidden');
+
+                    document.getElementById('name-screen').classList.remove('hidden');
+
+                }
+
+            } else {
+
+                document.getElementById('mainApp').style.visibility = 'hidden';
+
+                document.getElementById('auth-screen').classList.remove('hidden');
+
+            }
+
+        });
+
+        window.saveName = async () => {
+
+            const name = document.getElementById('nameInput').value;
+
+            if (name) {
+
+                displayName = name;
+
+                await setDoc(doc(db, "users", currentUser.uid), { name: name, email: currentUser.email, uid: currentUser.uid });
+
+                document.getElementById('name-screen').classList.add('hidden');
+
+                showApp();
+
+            }
+
+        };
+
+        function showApp() {
+
+            document.getElementById('mainApp').style.visibility = 'visible';
+
+            loadMessages();
+
+        }
+
+        window.logout = () => signOut(auth);
+
+        window.switchTab = (t) => {
+
+            tab = t;
+
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(t+'Btn').classList.add('active');
+
+            loadMessages();
+
+        };
+
+        document.getElementById('sendBtn').onclick = async () => {
+
+            const txt = document.getElementById('msgInput').value;
+
+            if(txt) {
+
+                const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
+
+                await addDoc(collection(db, col), { sender: displayName, text: txt, time: new Date() });
+
+                document.getElementById('msgInput').value = "";
+
+            }
+
+        };
+
+        function loadMessages() {
+
+            if(unsub) unsub();
+
+            const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
+
+            const q = query(collection(db, col), orderBy("time", "asc"));
+
+            unsub = onSnapshot(q, (snap) => {
+
+                const area = document.getElementById('msgArea');
+
+                area.innerHTML = "";
+
+                snap.forEach(d => {
+
+                    const data = d.data();
+
+                    area.innerHTML += `<div class="msg ${data.sender === displayName ? 'sent' : 'received'}">
+
+                        <small style="display:block; font-size:10px; opacity:0.5">${data.sender}</small>${data.text}</div>`;
+
+                });
+
+                area.scrollTop = area.scrollHeight;
+
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>
+    
+  </body>
+  
+</html>
