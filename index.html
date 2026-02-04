@@ -3,390 +3,240 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Sultan platform pro</title>
+    <title>sulan dev wepsie</title>
     
 
   </head>
     
   <body>
   <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
-
 <head>
-
-    <meta name="google-site-verification" content="vcn0cLXxHdzBrBGqavKONrne7UWzj0OOF3tdRlTo6Ig" />
-
-    
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    
-
-    <title>سلطان لتطوير المواقع | إنشاء تطبيقات وبرامج احترافية</title>
-
-    <meta name="description" content="منصة سلطان لبرمجة وتصميم المواقع الإلكترونية والتطبيقات بأحدث التقنيات. تواصل مع المبرمج سلطان مباشرة وابدأ مشروعك الآن.">
-
-    <meta name="keywords" content="سلطان مبرمج, إنشاء مواقع, برمجة تطبيقات, تصميم موقع الكتروني, Sultan Dev">
-
-    <meta name="author" content="Sultan Dev">
-
+    <title>SULTAN DEV | PLATFORM</title>
     <style>
-
-        :root { --primary: #00ff88; --bg: #0a0a0a; --card: #111; --border: #222; }
-
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: white; margin: 0; overflow: hidden; }
-
+        :root { --primary: #ffd700; --neon: #00f3ff; --bg: #050505; --card: #111; --border: #222; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; overflow: hidden; }
         
-
-        /* شاشات الغطاء */
-
         .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-
-        .box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--border); text-align: center; width: 320px; box-shadow: 0 0 20px rgba(0,255,136,0.1); }
-
+        .box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); text-align: center; width: 320px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
         
-
-        .main-layout { display: grid; grid-template-columns: 280px 1fr; height: 100vh; visibility: hidden; }
-
+        .main-layout { display: none; grid-template-columns: 280px 1fr; height: 100vh; }
         .sidebar { background: var(--card); border-left: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-
         
-
-        .nav-btn { background: #1a1a1a; border: 1px solid var(--border); color: #888; padding: 12px; border-radius: 8px; cursor: pointer; text-align: right; transition: 0.3s; }
-
-        .nav-btn.active { border-color: var(--primary); color: var(--primary); background: rgba(0,255,136,0.05); }
-
+        .nav-btn { background: #1a1a1a; border: 1px solid var(--border); color: #888; padding: 12px; border-radius: 8px; cursor: pointer; text-align: right; font-size: 14px; transition: 0.3s; border: none; width: 100%; }
+        .nav-btn.active { border: 1px solid var(--neon); color: var(--neon); }
         
-
-        .chat-container { display: flex; flex-direction: column; background: var(--bg); }
-
-        .messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-
-        
-
-        .msg { max-width: 75%; padding: 10px 15px; border-radius: 12px; font-size: 14px; position: relative; }
-
+        .chat-container { display: flex; flex-direction: column; background: var(--bg); height: 100vh; position: relative; }
+        .messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .msg { max-width: 75%; padding: 12px 16px; border-radius: 15px; font-size: 14px; word-wrap: break-word; }
         .received { background: #1a1a1a; align-self: flex-start; border: 1px solid var(--border); }
-
         .sent { background: var(--primary); color: black; align-self: flex-end; font-weight: bold; }
-
         
-
-        input { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; outline: none; margin-bottom: 10px; box-sizing: border-box; }
-
-        button { background: var(--primary); color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
-
-        button:hover { opacity: 0.8; }
-
-        
-
+        input { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
+        button { background: var(--primary); color: black; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
         .hidden { display: none !important; }
 
-        #auth-error { color: #ff4444; font-size: 11px; margin-top: 10px; }
-
+        /* عرض البوت بشكل طبيعي كامل */
+        #botAreaWrap { height: 100%; width: 100%; background: #000; }
+        #botAreaWrap iframe { width: 100%; height: 100%; border: none; }
     </style>
-
 </head>
-
 <body>
 
-    <div id="auth-screen" class="overlay">
-
+    <div id="login-screen" class="overlay">
         <div class="box">
-
-            <h2 style="color: var(--primary); margin-bottom: 5px;">SULTAN DEV</h2>
-
-            <p style="font-size: 12px; color: #666; margin-bottom: 20px;">منصة المراسلة وتطوير الأعمال</p>
-
-            <input type="email" id="email" placeholder="البريد الإلكتروني">
-
-            <input type="password" id="pass" placeholder="كلمة المرور">
-
-            <button id="authBtn">دخول / إنشاء حساب</button>
-
-            <p id="auth-error"></p>
-
+            <h1 style="color: var(--primary);">سلطان للتداول</h1>
+            <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
+            <input type="password" id="loginPass" placeholder="كلمة السر">
+            <button onclick="handleLogin()">دخول</button>
+            <button class="nav-btn" style="margin-top:10px" onclick="showScreen('register-screen')">إنشاء حساب جديد</button>
         </div>
+    </div>
 
+    <div id="register-screen" class="overlay hidden">
+        <div class="box">
+            <h1 style="color: var(--neon);">حساب جديد</h1>
+            <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
+            <input type="password" id="regPass" placeholder="كلمة السر">
+            <button onclick="handleRegister()" style="background: var(--neon);">إنشاء</button>
+            <button class="nav-btn" style="margin-top:10px" onclick="showScreen('login-screen')">لديك حساب بالفعل؟</button>
+        </div>
     </div>
 
     <div id="name-screen" class="overlay hidden">
-
         <div class="box">
-
-            <h2 style="color: var(--primary)">مرحباً بك</h2>
-
-            <p style="font-size: 14px; color: #888;">اختر اسماً ليظهر في المحادثات</p>
-
-            <input type="text" id="nameInput" placeholder="اسمك الكريم...">
-
-            <button onclick="saveName()">بدء الاستخدام</button>
-
+            <h2 style="color: var(--primary)">البيانات الشخصية</h2>
+            <input type="text" id="usernameInput" placeholder="اسم المستخدم (بالإنجليزي)">
+            <input type="text" id="realNameInput" placeholder="الاسم الظاهر">
+            <button onclick="saveProfile()">ابدأ الآن</button>
         </div>
-
     </div>
 
     <div class="main-layout" id="mainApp">
-
         <div class="sidebar">
-
-            <h3 style="color: var(--primary); font-size: 14px; letter-spacing: 1px;">DASHBOARD</h3>
-
-            <button class="nav-btn active" id="privateBtn" onclick="switchTab('private')">🔒 شات خاص مع سلطان</button>
-
+            <h2 style="color: var(--primary); text-align: center;">SULTAN DEV</h2>
+            <button class="nav-btn active" id="privateBtn" onclick="switchTab('private')">🔒 شات خاص</button>
             <button class="nav-btn" id="publicBtn" onclick="switchTab('public')">🌐 الشات العام</button>
-
-            <button onclick="logout()" style="margin-top: auto; background: #1a1a1a; color: #ff4444; border: 1px solid #333;">تسجيل خروج</button>
-
+            <button class="nav-btn" id="botBtn" onclick="switchTab('bot')">🤖 المساعد الذكي</button>
+            <button class="nav-btn" id="v-btn-side" style="color: var(--primary); border: 1px solid var(--primary);" onclick="document.getElementById('verify-popup').classList.remove('hidden')">🛡️ توثيق الحساب</button>
+            <button onclick="userLogout()" style="margin-top: auto; background: #222; color: #ff4444;">خروج</button>
         </div>
-
-        
 
         <div class="chat-container">
-
-            <div class="messages" id="msgArea"></div>
-
-            <div style="padding: 20px; display: flex; gap: 10px; background: var(--card);">
-
-                <input type="text" id="msgInput" placeholder="اكتب رسالتك هنا..." style="margin-bottom: 0;">
-
-                <button id="sendBtn" style="width: auto; padding: 0 30px;">إرسال</button>
-
+            <div id="chatAreaWrap" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="messages" id="msgArea"></div>
+                <div style="padding: 20px; display: flex; gap: 10px; background: var(--card);">
+                    <input type="text" id="msgInput" placeholder="اكتب هنا..." style="margin:0">
+                    <button id="realSendBtn" style="width: 80px;">إرسال</button>
+                </div>
             </div>
-
+            <div id="botAreaWrap" class="hidden">
+                <iframe src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2026/01/30/19/20260130192659-1IADK8AN.json"></iframe>
+            </div>
         </div>
+    </div>
 
+    <div id="verify-popup" class="overlay hidden">
+        <div class="box">
+            <h2 style="color: var(--neon);">توثيق الحساب 🛡️</h2>
+            <p style="font-size: 12px; color: #888;">أدخل كود التوثيق (يستخدم لمرة واحدة)</p>
+            <input type="text" id="vCode" placeholder="أدخل الكود هنا">
+            <button onclick="submitV()">تفعيل التوثيق</button>
+            <button onclick="document.getElementById('verify-popup').classList.add('hidden')" style="background:#222; margin-top:5px; color:white">إغلاق</button>
+        </div>
     </div>
 
     <script type="module">
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // إعدادات Firebase الخاصة بمشروعك
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
-
             apiKey: "AIzaSyCRRykMJG9x2QjXL7zvr5bFHExaLgbvK8o",
-
             authDomain: "bot-trading-175e2.firebaseapp.com",
-
             projectId: "bot-trading-175e2",
-
             storageBucket: "bot-trading-175e2.firebasestorage.app",
-
-            messagingSenderId: "258267116344",
-
             appId: "1:258267116344:web:096d5e348c75c9764207cd"
-
         };
 
         const app = initializeApp(firebaseConfig);
-
         const auth = getAuth(app);
-
         const db = getFirestore(app);
+        let currentUser = null, userData = null, tab = "private", unsub = null;
 
-        let currentUser = null;
-
-        let displayName = "";
-
-        let tab = "private";
-
-        let unsub = null;
-
-        // نظام تسجيل الدخول
-
-        document.getElementById('authBtn').onclick = async () => {
-
-            const email = document.getElementById('email').value;
-
-            const pass = document.getElementById('pass').value;
-
-            const errBox = document.getElementById('auth-error');
-
-            errBox.innerText = "جاري التحقق...";
-
-            try {
-
-                await signInWithEmailAndPassword(auth, email, pass);
-
-            } catch (error) {
-
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-
-                    try {
-
-                        await createUserWithEmailAndPassword(auth, email, pass);
-
-                    } catch (regErr) { errBox.innerText = "خطأ في التسجيل: " + regErr.message; }
-
-                } else { errBox.innerText = "خطأ: " + error.message; }
-
-            }
-
+        window.showScreen = (id) => {
+            document.querySelectorAll('.overlay').forEach(s => s.classList.add('hidden'));
+            document.getElementById('mainApp').style.display = 'none';
+            if(id === 'mainApp') document.getElementById(id).style.display = 'grid';
+            else document.getElementById(id).classList.remove('hidden');
         };
-
-        // متابعة حالة المستخدم
 
         onAuthStateChanged(auth, async (user) => {
-
             if (user) {
-
                 currentUser = user;
-
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-
-                if (userDoc.exists()) {
-
-                    displayName = userDoc.data().name;
-
-                    document.getElementById('auth-screen').classList.add('hidden');
-
-                    showApp();
-
-                } else {
-
-                    document.getElementById('auth-screen').classList.add('hidden');
-
-                    document.getElementById('name-screen').classList.remove('hidden');
-
-                }
-
-            } else {
-
-                document.getElementById('mainApp').style.visibility = 'hidden';
-
-                document.getElementById('auth-screen').classList.remove('hidden');
-
-            }
-
+                const d = await getDoc(doc(db, "users", user.uid));
+                if (d.exists()) { 
+                    userData = d.data();
+                    if(userData.isVerified) document.getElementById('v-btn-side').classList.add('hidden');
+                    showScreen('mainApp'); loadMessages();
+                } else { showScreen('name-screen'); }
+            } else { showScreen('login-screen'); }
         });
 
-        // حفظ الاسم الأول مرة
+        window.handleLogin = async () => {
+            const e = document.getElementById('loginEmail').value, p = document.getElementById('loginPass').value;
+            try { await signInWithEmailAndPassword(auth, e, p); } catch { alert("خطأ في بيانات الدخول"); }
+        };
 
-        window.saveName = async () => {
+        window.handleRegister = async () => {
+            const e = document.getElementById('regEmail').value, p = document.getElementById('regPass').value;
+            try { await createUserWithEmailAndPassword(auth, e, p); } catch (err) { alert(err.message); }
+        };
 
-            const name = document.getElementById('nameInput').value;
+        window.saveProfile = async () => {
+            const u = document.getElementById('usernameInput').value.trim().toLowerCase();
+            const r = document.getElementById('realNameInput').value.trim();
+            if(!u || !r) return alert("أكمل البيانات");
+            const q = query(collection(db, "users"), where("username", "==", u));
+            const snap = await getDocs(q);
+            if(!snap.empty) return alert("اسم المستخدم مستخدم مسبقاً");
+            const data = { name: r, username: u, uid: currentUser.uid, isVerified: false };
+            await setDoc(doc(db, "users", currentUser.uid), data);
+            userData = data; showScreen('mainApp');
+        };
 
-            if (name) {
-
-                displayName = name;
-
-                await setDoc(doc(db, "users", currentUser.uid), { 
-
-                    name: name, 
-
-                    email: currentUser.email, 
-
-                    uid: currentUser.uid 
-
-                });
-
-                document.getElementById('name-screen').classList.add('hidden');
-
-                showApp();
-
+        window.switchTab = (t) => { 
+            tab = t; 
+            document.getElementById('privateBtn').classList.toggle('active', t === 'private');
+            document.getElementById('publicBtn').classList.toggle('active', t === 'public');
+            document.getElementById('botBtn').classList.toggle('active', t === 'bot');
+            if (t === 'bot') {
+                document.getElementById('chatAreaWrap').classList.add('hidden');
+                document.getElementById('botAreaWrap').classList.remove('hidden');
+            } else {
+                document.getElementById('chatAreaWrap').classList.remove('hidden');
+                document.getElementById('botAreaWrap').classList.add('hidden');
+                loadMessages();
             }
-
         };
 
-        function showApp() {
-
-            document.getElementById('mainApp').style.visibility = 'visible';
-
-            loadMessages();
-
-        }
-
-        window.logout = () => signOut(auth);
-
-        window.switchTab = (t) => {
-
-            tab = t;
-
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-            document.getElementById(t+'Btn').classList.add('active');
-
-            loadMessages();
-
-        };
-
-        // إرسال الرسائل
-
-        document.getElementById('sendBtn').onclick = async () => {
-
+        document.getElementById('realSendBtn').onclick = async () => {
             const txt = document.getElementById('msgInput').value;
-
-            if(txt) {
-
-                const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
-
-                await addDoc(collection(db, col), { 
-
-                    sender: displayName, 
-
-                    text: txt, 
-
-                    time: new Date() 
-
-                });
-
-                document.getElementById('msgInput').value = "";
-
-            }
-
+            if(!txt || !userData) return;
+            const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
+            await addDoc(collection(db, col), { sender: userData.name, text: txt, time: serverTimestamp(), isVerified: userData.isVerified });
+            document.getElementById('msgInput').value = "";
         };
 
-        // عرض الرسائل
+        // --- نظام التوثيق الذكي (يستخدم مرة واحدة فقط) ---
+        window.submitV = async () => {
+            const code = document.getElementById('vCode').value.trim();
+            if(!code) return alert("أدخل الكود");
+            
+            const codeRef = doc(db, "verify_codes", code);
+            const codeSnap = await getDoc(codeRef);
+
+            if (codeSnap.exists()) {
+                const codeData = codeSnap.data();
+                if (codeData.status === "unused") {
+                    // تحديث المستخدم وتحديث الكود في نفس الوقت
+                    await updateDoc(doc(db, "users", currentUser.uid), { isVerified: true });
+                    await updateDoc(codeRef, { 
+                        status: "used", 
+                        usedBy: currentUser.uid,
+                        usedAt: serverTimestamp() 
+                    });
+                    alert("مبروك! تم توثيق حسابك بنجاح 🛡️");
+                    location.reload();
+                } else {
+                    alert("هذا الكود تم استخدامه من قبل مستخدم آخر!");
+                }
+            } else {
+                alert("الكود غير صحيح!");
+            }
+        };
+
+        window.userLogout = () => signOut(auth).then(() => location.reload());
 
         function loadMessages() {
-
             if(unsub) unsub();
-
+            if(tab === 'bot') return;
             const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
-
-            const q = query(collection(db, col), orderBy("time", "asc"));
-
-            unsub = onSnapshot(q, (snap) => {
-
-                const area = document.getElementById('msgArea');
-
-                area.innerHTML = "";
-
+            unsub = onSnapshot(query(collection(db, col), orderBy("time", "asc")), (snap) => {
+                const area = document.getElementById('msgArea'); area.innerHTML = "";
                 snap.forEach(d => {
-
-                    const data = d.data();
-
-                    const isMe = data.sender === displayName;
-
-                    area.innerHTML += `<div class="msg ${isMe ? 'sent' : 'received'}">
-
-                        <small style="display:block; font-size:10px; opacity:0.5; margin-bottom:3px;">${data.sender}</small>
-
-                        ${data.text}
-
-                    </div>`;
-
+                    const m = d.data();
+                    const v = m.isVerified ? "🛡️" : "";
+                    const align = m.sender === userData.name ? 'sent' : 'received';
+                    area.innerHTML += `<div class="msg ${align}"><b>${m.sender} ${v}</b><br>${m.text}</div>`;
                 });
-
                 area.scrollTop = area.scrollHeight;
-
             });
-
         }
-
     </script>
-
 </body>
-
 </html>
     
   </body>
