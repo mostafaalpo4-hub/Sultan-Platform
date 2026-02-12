@@ -3,240 +3,626 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>sulan dev wepsie</title>
+    <title>Sultan platform v1.6</title>
     
 
   </head>
     
   <body>
   <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SULTAN DEV | PLATFORM</title>
+
+    <title>SULTAN DEV | THE EMPIRE</title>
+
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+
     <style>
-        :root { --primary: #ffd700; --neon: #00f3ff; --bg: #050505; --card: #111; --border: #222; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; overflow: hidden; }
+
+        :root { 
+
+            --primary: #ffd700; 
+
+            --neon: #00f3ff; 
+
+            --bg: #050505; 
+
+            --card: #111; 
+
+            --border: #222; 
+
+            --text-gray: #888;
+
+            --notify-green: #39ff14;
+
+            --gold: #ffd700;
+
+        }
+
         
-        .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); text-align: center; width: 320px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
-        
-        .main-layout { display: none; grid-template-columns: 280px 1fr; height: 100vh; }
-        .sidebar { background: var(--card); border-left: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        
-        .nav-btn { background: #1a1a1a; border: 1px solid var(--border); color: #888; padding: 12px; border-radius: 8px; cursor: pointer; text-align: right; font-size: 14px; transition: 0.3s; border: none; width: 100%; }
-        .nav-btn.active { border: 1px solid var(--neon); color: var(--neon); }
-        
-        .chat-container { display: flex; flex-direction: column; background: var(--bg); height: 100vh; position: relative; }
-        .messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .msg { max-width: 75%; padding: 12px 16px; border-radius: 15px; font-size: 14px; word-wrap: break-word; }
-        .received { background: #1a1a1a; align-self: flex-start; border: 1px solid var(--border); }
-        .sent { background: var(--primary); color: black; align-self: flex-end; font-weight: bold; }
-        
-        input { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
-        button { background: var(--primary); color: black; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
+
+        .sidebar { 
+
+            position: fixed; top: 0; right: -280px; width: 280px; height: 100%; 
+
+            background: rgba(17, 17, 17, 0.98); border-left: 1px solid var(--border); 
+
+            padding: 70px 20px 20px; display: flex; flex-direction: column; gap: 12px; 
+
+            z-index: 1001; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;
+
+        }
+
+        .sidebar.active { right: 0; }
+
+        .menu-icon { 
+
+            position: fixed; top: 15px; right: 20px; z-index: 1002; cursor: pointer; 
+
+            background: var(--card); padding: 10px; border-radius: 8px; border: 1px solid var(--primary); 
+
+            display: flex; flex-direction: column; gap: 4px; 
+
+        }
+
+        .menu-icon span { width: 25px; height: 3px; background: var(--primary); border-radius: 2px; }
+
+        .nav-btn { 
+
+            background: #1a1a1a; border: 1px solid transparent; color: var(--text-gray); 
+
+            padding: 16px; border-radius: 12px; cursor: pointer; text-align: right; 
+
+            font-size: 14px; transition: 0.3s; width: 100%; display: flex; align-items: center; gap: 10px; 
+
+        }
+
+        .nav-btn.active { border: 1px solid var(--neon); color: var(--neon); background: rgba(0, 243, 255, 0.05); }
+
+        .nav-btn:hover { background: #222; color: white; }
+
+        .overlay { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
+
+        .box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); text-align: center; width: 340px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.1); }
+
+        .content-section { height: 100vh; width: 100%; overflow-y: auto; padding-top: 20px; padding-bottom: 120px; box-sizing: border-box; }
+
         .hidden { display: none !important; }
 
-        /* عرض البوت بشكل طبيعي كامل */
-        #botAreaWrap { height: 100%; width: 100%; background: #000; }
-        #botAreaWrap iframe { width: 100%; height: 100%; border: none; }
+        .otaku-container { padding: 20px; max-width: 1200px; margin: auto; }
+
+        .section-title { border-right: 5px solid var(--gold); padding-right: 15px; margin: 40px 0 15px; color: var(--gold); font-size: 28px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+
+        .card { background: #121212; border-radius: 12px; overflow: hidden; border: 1px solid #222; cursor: pointer; position: relative; }
+
+        .card img { width: 100%; height: 260px; object-fit: cover; }
+
+        .view-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: var(--gold); padding: 2px 8px; border-radius: 5px; font-size: 12px; border: 1px solid var(--gold); }
+
+        .admin-panel { background: #0a0a0a; padding: 20px; border-radius: 20px; margin: 20px; border: 1px solid #ff0000; }
+
+        .stat-box { background: #151515; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); }
+
+        .user-row { display: flex; justify-content: space-between; padding: 15px; background: #111; margin-bottom: 8px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+
+        .unread-msg { border-right: 5px solid var(--notify-green); background: #1a2a1a; }
+
+        .chat-bubble { padding: 12px; border-radius: 15px; margin-bottom: 10px; max-width: 80%; position: relative; }
+
+        .sent { background: var(--primary); color: black; align-self: flex-end; margin-right: auto; }
+
+        .received { background: #222; color: white; align-self: flex-start; }
+
+        input, select { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; }
+
+        .withdraw-btn { background: var(--primary); color: black; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+
+        .docs-tools { display: flex; flex-wrap: wrap; gap: 10px; background: #111; padding: 15px; margin: 10px; border-radius: 12px; border: 1px solid var(--border); }
+
+        .tool-btn { background: #222; color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; transition: 0.3s; }
+
+        .tool-btn:hover { background: var(--primary); color: black; }
+
+        #editor { background: white; color: black; border-radius: 0 0 12px 12px; min-height: 500px; }
+
+        .ql-toolbar { background: #eee !important; border-radius: 12px 12px 0 0; }
+
+        .detail-view { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 20px; }
+
     </style>
+
 </head>
+
 <body>
 
+    <div class="menu-icon" onclick="toggleSidebar();">
+
+        <span></span><span></span><span></span>
+
+    </div>
+
     <div id="login-screen" class="overlay">
+
         <div class="box">
-            <h1 style="color: var(--primary);">سلطان للتداول</h1>
-            <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="loginPass" placeholder="كلمة السر">
-            <button onclick="handleLogin()">دخول</button>
-            <button class="nav-btn" style="margin-top:10px" onclick="showScreen('register-screen')">إنشاء حساب جديد</button>
+
+            <h1 id="auth-title" style="color: var(--primary);">سلطان ديف</h1>
+
+            <div id="register-fields" class="hidden">
+
+                <input type="text" id="regName" placeholder="اسمك الكريم">
+
+            </div>
+
+            <input type="email" id="userEmail" placeholder="البريد الإلكتروني">
+
+            <input type="password" id="userPass" placeholder="كلمة السر">
+
+            <button onclick="handleAuth()" id="auth-btn" class="withdraw-btn">دخول</button>
+
+            <p onclick="toggleAuth()" id="toggle-text" style="font-size: 12px; cursor: pointer; color: var(--neon); margin-top: 15px;">لا تملك حساب؟ سجل الآن</p>
+
         </div>
+
     </div>
 
-    <div id="register-screen" class="overlay hidden">
-        <div class="box">
-            <h1 style="color: var(--neon);">حساب جديد</h1>
-            <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="regPass" placeholder="كلمة السر">
-            <button onclick="handleRegister()" style="background: var(--neon);">إنشاء</button>
-            <button class="nav-btn" style="margin-top:10px" onclick="showScreen('login-screen')">لديك حساب بالفعل؟</button>
-        </div>
-    </div>
+    <div class="main-layout" id="mainApp" style="display:none;">
 
-    <div id="name-screen" class="overlay hidden">
-        <div class="box">
-            <h2 style="color: var(--primary)">البيانات الشخصية</h2>
-            <input type="text" id="usernameInput" placeholder="اسم المستخدم (بالإنجليزي)">
-            <input type="text" id="realNameInput" placeholder="الاسم الظاهر">
-            <button onclick="saveProfile()">ابدأ الآن</button>
-        </div>
-    </div>
+        <div class="sidebar" id="sidebar">
 
-    <div class="main-layout" id="mainApp">
-        <div class="sidebar">
             <h2 style="color: var(--primary); text-align: center;">SULTAN DEV</h2>
-            <button class="nav-btn active" id="privateBtn" onclick="switchTab('private')">🔒 شات خاص</button>
-            <button class="nav-btn" id="publicBtn" onclick="switchTab('public')">🌐 الشات العام</button>
-            <button class="nav-btn" id="botBtn" onclick="switchTab('bot')">🤖 المساعد الذكي</button>
-            <button class="nav-btn" id="v-btn-side" style="color: var(--primary); border: 1px solid var(--primary);" onclick="document.getElementById('verify-popup').classList.remove('hidden')">🛡️ توثيق الحساب</button>
-            <button onclick="userLogout()" style="margin-top: auto; background: #222; color: #ff4444;">خروج</button>
+
+            <button class="nav-btn active" onclick="switchTab('packages')">💎 باقات الخدمات</button>
+
+            <button class="nav-btn" onclick="switchTab('otaku')">☠️ إمبراطورية سلطان</button>
+
+            <button class="nav-btn" onclick="switchTab('docs')">📝 مستندات سلطان</button>
+
+            <button class="nav-btn" onclick="switchTab('cloud')">☁️ سلطان كلاود</button>
+
+            <button class="nav-btn" onclick="switchTab('private')">🔒 الشات الخاص</button>
+
+            <div id="adminLinkArea"></div>
+
+            <button onclick="userLogout()" style="margin-top:auto; padding:10px; color:red; background:none; border:none; cursor:pointer;">تسجيل الخروج</button>
+
         </div>
 
         <div class="chat-container">
-            <div id="chatAreaWrap" style="display: flex; flex-direction: column; height: 100%;">
-                <div class="messages" id="msgArea"></div>
-                <div style="padding: 20px; display: flex; gap: 10px; background: var(--card);">
-                    <input type="text" id="msgInput" placeholder="اكتب هنا..." style="margin:0">
-                    <button id="realSendBtn" style="width: 80px;">إرسال</button>
+
+            <div id="packagesAreaWrap" class="content-section">
+
+                <div style="background: linear-gradient(90deg, #b29400, #ffd700); color: black; padding: 20px; text-align: center; border-radius: 15px; margin: 20px; font-weight: bold;">🚀 عروض منصة سلطان ديف الحصرية</div>
+
+                <div id="packagesList" style="padding:20px;"></div>
+
+            </div>
+
+            <div id="otakuAreaWrap" class="content-section hidden">
+
+                <header style="text-align:center; padding:10px;"><h1 style="color:var(--gold)">إمبراطورية سلطان ☠️</h1></header>
+
+                <div class="otaku-container">
+
+                    <div id="trendingSection">
+
+                        <h2 class="section-title">🔥 الأكثر مشاهدة</h2>
+
+                        <div class="grid" id="trendingGrid"></div>
+
+                    </div>
+
+                    <div id="allFolders"></div>
+
                 </div>
+
             </div>
-            <div id="botAreaWrap" class="hidden">
-                <iframe src="https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2026/01/30/19/20260130192659-1IADK8AN.json"></iframe>
+
+            <div id="docsAreaWrap" class="content-section hidden">
+
+                <div class="docs-tools">
+
+                    <input type="text" id="docTitle" value="مستند سلطان - جديد" style="width:200px; color:white; border:1px solid #333; margin:0; padding: 5px;">
+
+                    <button class="tool-btn" onclick="setDocDirection('rtl')">يمين (AR)</button>
+
+                    <button class="tool-btn" onclick="setDocDirection('ltr')">يسار (EN)</button>
+
+                    <button class="tool-btn" style="color: #ffd700;" onclick="saveToCloud()">حفظ سحابي ☁️</button>
+
+                    <button class="tool-btn" onclick="exportPDF()">تحميل PDF 📄</button>
+
+                    <button class="tool-btn" onclick="exportWord()">تحميل Word 📝</button>
+
+                </div>
+
+                <div style="margin:10px;"><div id="editor"></div></div>
+
             </div>
+
+            <div id="privateAreaWrap" class="content-section hidden">
+
+                <div style="padding:20px;">
+
+                    <div id="chatBox" style="height:60vh; background:#111; border-radius:15px; overflow-y:auto; padding:20px; display:flex; flex-direction:column; border:1px solid var(--border);"></div>
+
+                    <div style="display:flex; gap:10px; margin-top:15px;">
+
+                        <input type="text" id="msgInput" placeholder="اكتب رسالتك هنا..." style="margin:0;">
+
+                        <button onclick="sendMessage()" class="withdraw-btn" style="width:80px; margin:0;">إرسال</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="adminAreaWrap" class="content-section hidden">
+
+                <div class="admin-panel">
+
+                    <h2 style="color:var(--primary); text-align:center;">👑 لوحة السلطان</h2>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+
+                        <div class="stat-box"><h4>إجمالي الأعضاء</h4><p id="totalUsers">0</p></div>
+
+                        <div class="stat-box"><h4>محادثاتك</h4><p id="myChats">0</p></div>
+
+                    </div>
+
+                    <h3 style="color:var(--neon)">المستخدمين الموزعين عليك:</h3>
+
+                    <div id="assignedUsersList"></div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 
-    <div id="verify-popup" class="overlay hidden">
-        <div class="box">
-            <h2 style="color: var(--neon);">توثيق الحساب 🛡️</h2>
-            <p style="font-size: 12px; color: #888;">أدخل كود التوثيق (يستخدم لمرة واحدة)</p>
-            <input type="text" id="vCode" placeholder="أدخل الكود هنا">
-            <button onclick="submitV()">تفعيل التوثيق</button>
-            <button onclick="document.getElementById('verify-popup').classList.add('hidden')" style="background:#222; margin-top:5px; color:white">إغلاق</button>
+    <div id="detailView" class="detail-view">
+
+        <button class="withdraw-btn" style="width:auto;" onclick="closeDetails()">← العودة</button>
+
+        <div id="videoContainer" style="position: relative; padding-bottom: 56.25%; height: 0; margin-top:20px;">
+
+            <iframe id="mainPlayer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+
         </div>
+
+        <h1 id="hTitle" style="color:var(--gold);"></h1>
+
     </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, onSnapshot, query, orderBy, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCRRykMJG9x2QjXL7zvr5bFHExaLgbvK8o",
-            authDomain: "bot-trading-175e2.firebaseapp.com",
-            projectId: "bot-trading-175e2",
-            storageBucket: "bot-trading-175e2.firebasestorage.app",
-            appId: "1:258267116344:web:096d5e348c75c9764207cd"
-        };
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, query, where, orderBy, addDoc, limit, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyCRRykMJG9x2QjXL7zvr5bFHExaLgbvK8o", authDomain: "bot-trading-175e2.firebaseapp.com", projectId: "bot-trading-175e2", appId: "1:258267116344:web:096d5e348c75c9764207cd" };
+
+        const otakuConfig = { apiKey: "AIzaSyDBJ_ABxdFTp1_MDMqoRYAev0_EAvbobvQ", projectId: "sultan-2aae3", appId: "1:28005518818:web:4a79ea71bb4c8adaa7fdbb" };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        let currentUser = null, userData = null, tab = "private", unsub = null;
 
-        window.showScreen = (id) => {
-            document.querySelectorAll('.overlay').forEach(s => s.classList.add('hidden'));
-            document.getElementById('mainApp').style.display = 'none';
-            if(id === 'mainApp') document.getElementById(id).style.display = 'grid';
-            else document.getElementById(id).classList.remove('hidden');
+        const otakuApp = initializeApp(otakuConfig, "otakuApp");
+
+        const auth = getAuth(app);
+
+        const db = getFirestore(app);
+
+        const dbOtaku = getFirestore(otakuApp);
+
+        const ADMINS = ["mostafa@admin.com", "mohamed@admin.com", "marco@admin.com", "ahmed@admin.com"];
+
+        let isLoginMode = true;
+
+        window.toggleAuth = () => {
+
+            isLoginMode = !isLoginMode;
+
+            document.getElementById('register-fields').classList.toggle('hidden');
+
+            document.getElementById('auth-title').innerText = isLoginMode ? "سلطان ديف" : "انضم للإمبراطورية";
+
+            document.getElementById('auth-btn').innerText = isLoginMode ? "دخول" : "إنشاء حساب";
+
+            document.getElementById('toggle-text').innerText = isLoginMode ? "لا تملك حساب؟ سجل الآن" : "لديك حساب؟ سجل دخولك";
+
+        };
+
+        window.handleAuth = async () => {
+
+            const email = userEmail.value; const pass = userPass.value;
+
+            try {
+
+                if (isLoginMode) { await signInWithEmailAndPassword(auth, email, pass); } 
+
+                else {
+
+                    const res = await createUserWithEmailAndPassword(auth, email, pass);
+
+                    const assignedTo = ADMINS[Math.floor(Math.random() * ADMINS.length)];
+
+                    await setDoc(doc(db, "users", res.user.uid), { name: regName.value, email: email, assignedTo: assignedTo, createdAt: serverTimestamp(), hasUnread: false });
+
+                }
+
+            } catch (e) { alert("حدث خطأ: " + e.message); }
+
         };
 
         onAuthStateChanged(auth, async (user) => {
+
             if (user) {
-                currentUser = user;
-                const d = await getDoc(doc(db, "users", user.uid));
-                if (d.exists()) { 
-                    userData = d.data();
-                    if(userData.isVerified) document.getElementById('v-btn-side').classList.add('hidden');
-                    showScreen('mainApp'); loadMessages();
-                } else { showScreen('name-screen'); }
-            } else { showScreen('login-screen'); }
+
+                document.getElementById('login-screen').classList.add('hidden');
+
+                document.getElementById('mainApp').style.display = 'block';
+
+                if (ADMINS.includes(user.email.toLowerCase())) setupAdmin(user.email.toLowerCase());
+
+                loadOtakuContent(); loadUserMessages(user.uid);
+
+            } else {
+
+                document.getElementById('login-screen').classList.remove('hidden');
+
+                document.getElementById('mainApp').style.display = 'none';
+
+            }
+
         });
 
-        window.handleLogin = async () => {
-            const e = document.getElementById('loginEmail').value, p = document.getElementById('loginPass').value;
-            try { await signInWithEmailAndPassword(auth, e, p); } catch { alert("خطأ في بيانات الدخول"); }
+        function setupAdmin(adminEmail) {
+
+            document.getElementById('adminLinkArea').innerHTML = `<button class="nav-btn" style="color:red; border:1px solid red;" onclick="switchTab('admin')">👑 لوحة السلطان</button>`;
+
+            const q = query(collection(db, "users"), where("assignedTo", "==", adminEmail));
+
+            onSnapshot(q, (snap) => {
+
+                const list = document.getElementById('assignedUsersList');
+
+                list.innerHTML = "";
+
+                document.getElementById('myChats').innerText = snap.size;
+
+                snap.forEach(doc => {
+
+                    const u = doc.data();
+
+                    const div = document.createElement('div');
+
+                    div.className = `user-row ${u.hasUnread ? 'unread-msg' : ''}`;
+
+                    div.innerHTML = `<span>👤 ${u.name}</span> <span>${u.hasUnread ? '🟢 رسالة جديدة' : ''}</span>`;
+
+                    div.onclick = () => { updateDoc(doc.ref, { hasUnread: false }); switchTab('private'); loadUserMessages(doc.id); };
+
+                    list.appendChild(div);
+
+                });
+
+            });
+
+            onSnapshot(collection(db, "users"), snap => document.getElementById('totalUsers').innerText = snap.size);
+
+        }
+
+        window.sendMessage = async () => {
+
+            const text = msgInput.value; if(!text) return;
+
+            const uid = auth.currentUser.uid;
+
+            await addDoc(collection(db, `chats/${uid}/messages`), { text: text, sender: uid, time: serverTimestamp() });
+
+            if (!ADMINS.includes(auth.currentUser.email)) await updateDoc(doc(db, "users", uid), { hasUnread: true });
+
+            msgInput.value = "";
+
         };
 
-        window.handleRegister = async () => {
-            const e = document.getElementById('regEmail').value, p = document.getElementById('regPass').value;
-            try { await createUserWithEmailAndPassword(auth, e, p); } catch (err) { alert(err.message); }
-        };
+        function loadUserMessages(uid) {
 
-        window.saveProfile = async () => {
-            const u = document.getElementById('usernameInput').value.trim().toLowerCase();
-            const r = document.getElementById('realNameInput').value.trim();
-            if(!u || !r) return alert("أكمل البيانات");
-            const q = query(collection(db, "users"), where("username", "==", u));
-            const snap = await getDocs(q);
-            if(!snap.empty) return alert("اسم المستخدم مستخدم مسبقاً");
-            const data = { name: r, username: u, uid: currentUser.uid, isVerified: false };
-            await setDoc(doc(db, "users", currentUser.uid), data);
-            userData = data; showScreen('mainApp');
-        };
+            const q = query(collection(db, `chats/${uid}/messages`), orderBy("time", "asc"));
 
-        window.switchTab = (t) => { 
-            tab = t; 
-            document.getElementById('privateBtn').classList.toggle('active', t === 'private');
-            document.getElementById('publicBtn').classList.toggle('active', t === 'public');
-            document.getElementById('botBtn').classList.toggle('active', t === 'bot');
-            if (t === 'bot') {
-                document.getElementById('chatAreaWrap').classList.add('hidden');
-                document.getElementById('botAreaWrap').classList.remove('hidden');
-            } else {
-                document.getElementById('chatAreaWrap').classList.remove('hidden');
-                document.getElementById('botAreaWrap').classList.add('hidden');
-                loadMessages();
-            }
-        };
+            onSnapshot(q, (snap) => {
 
-        document.getElementById('realSendBtn').onclick = async () => {
-            const txt = document.getElementById('msgInput').value;
-            if(!txt || !userData) return;
-            const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
-            await addDoc(collection(db, col), { sender: userData.name, text: txt, time: serverTimestamp(), isVerified: userData.isVerified });
-            document.getElementById('msgInput').value = "";
-        };
+                const box = document.getElementById('chatBox'); box.innerHTML = "";
 
-        // --- نظام التوثيق الذكي (يستخدم مرة واحدة فقط) ---
-        window.submitV = async () => {
-            const code = document.getElementById('vCode').value.trim();
-            if(!code) return alert("أدخل الكود");
-            
-            const codeRef = doc(db, "verify_codes", code);
-            const codeSnap = await getDoc(codeRef);
+                snap.forEach(m => {
 
-            if (codeSnap.exists()) {
-                const codeData = codeSnap.data();
-                if (codeData.status === "unused") {
-                    // تحديث المستخدم وتحديث الكود في نفس الوقت
-                    await updateDoc(doc(db, "users", currentUser.uid), { isVerified: true });
-                    await updateDoc(codeRef, { 
-                        status: "used", 
-                        usedBy: currentUser.uid,
-                        usedAt: serverTimestamp() 
-                    });
-                    alert("مبروك! تم توثيق حسابك بنجاح 🛡️");
-                    location.reload();
-                } else {
-                    alert("هذا الكود تم استخدامه من قبل مستخدم آخر!");
+                    const data = m.data();
+
+                    box.innerHTML += `<div class="chat-bubble ${data.sender === auth.currentUser.uid ? 'sent' : 'received'}">${data.text}</div>`;
+
+                });
+
+                box.scrollTop = box.scrollHeight;
+
+            });
+
+        }
+
+        function loadOtakuContent() {
+
+            onSnapshot(query(collection(dbOtaku, "sultan_library"), orderBy("views", "desc"), limit(5)), (snap) => {
+
+                const grid = document.getElementById('trendingGrid'); grid.innerHTML = "";
+
+                snap.forEach(d => grid.appendChild(createCard(d.data(), d.id)));
+
+            });
+
+            onSnapshot(collection(dbOtaku, "sultan_library"), (snap) => {
+
+                const container = document.getElementById('allFolders'); container.innerHTML = "";
+
+                const folders = {};
+
+                snap.forEach(d => {
+
+                    const data = d.data();
+
+                    if(!folders[data.folder]) folders[data.folder] = [];
+
+                    folders[data.folder].push({...data, id: d.id});
+
+                });
+
+                for(let f in folders) {
+
+                    const sec = document.createElement('div');
+
+                    sec.innerHTML = `<h2 class="section-title">📂 ${f}</h2><div class="grid"></div>`;
+
+                    folders[f].forEach(item => sec.querySelector('.grid').appendChild(createCard(item, item.id)));
+
+                    container.appendChild(sec);
+
                 }
-            } else {
-                alert("الكود غير صحيح!");
-            }
+
+            });
+
+        }
+
+        function createCard(d, id) {
+
+            const div = document.createElement('div'); div.className = 'card';
+
+            div.onclick = () => {
+
+                document.getElementById('hTitle').innerText = d.title;
+
+                document.getElementById('mainPlayer').src = d.video.replace('/view', '/preview');
+
+                document.getElementById('detailView').style.display = 'block';
+
+                updateDoc(doc(dbOtaku, "sultan_library", id), { views: increment(1) });
+
+            };
+
+            div.innerHTML = `<div class="view-badge">👁️ ${d.views || 0}</div><img src="${d.thumb}"><h3>${d.title}</h3>`;
+
+            return div;
+
+        }
+
+        window.switchTab = (tab) => {
+
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+
+            document.getElementById(tab + 'AreaWrap').classList.remove('hidden');
+
+            document.getElementById('sidebar').classList.remove('active');
+
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
         };
+
+        window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
 
         window.userLogout = () => signOut(auth).then(() => location.reload());
 
-        function loadMessages() {
-            if(unsub) unsub();
-            if(tab === 'bot') return;
-            const col = tab === 'private' ? `private_${currentUser.uid}` : "public_chat";
-            unsub = onSnapshot(query(collection(db, col), orderBy("time", "asc")), (snap) => {
-                const area = document.getElementById('msgArea'); area.innerHTML = "";
-                snap.forEach(d => {
-                    const m = d.data();
-                    const v = m.isVerified ? "🛡️" : "";
-                    const align = m.sender === userData.name ? 'sent' : 'received';
-                    area.innerHTML += `<div class="msg ${align}"><b>${m.sender} ${v}</b><br>${m.text}</div>`;
-                });
-                area.scrollTop = area.scrollHeight;
-            });
-        }
+        window.closeDetails = () => { document.getElementById('detailView').style.display = 'none'; document.getElementById('mainPlayer').src = ""; };
+
+        // --- نظام المستندات (التحميل المباشر PDF) ---
+
+        const quill = new Quill('#editor', { theme: 'snow' });
+
+        window.setDocDirection = (dir) => {
+
+            const editor = document.querySelector('.ql-editor');
+
+            editor.style.direction = dir;
+
+            editor.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+
+        };
+
+        window.exportPDF = async () => {
+
+            const { jsPDF } = window.jspdf;
+
+            const element = document.querySelector('.ql-editor');
+
+            const title = document.getElementById('docTitle').value;
+
+            try {
+
+                const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+
+                const imgData = canvas.toDataURL('image/png');
+
+                const pdf = new jsPDF('p', 'mm', 'a4');
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+                pdf.save(`${title}.pdf`);
+
+            } catch (err) { alert("خطأ في التحميل"); }
+
+        };
+
+        window.exportWord = () => {
+
+            const content = document.querySelector('.ql-editor').innerHTML;
+
+            const title = document.getElementById('docTitle').value;
+
+            const converted = htmlDocx.asBlob(`<html><head><meta charset="UTF-8"></head><body dir="rtl">${content}</body></html>`);
+
+            const link = document.createElement('a');
+
+            link.href = URL.createObjectURL(converted);
+
+            link.download = title + '.docx';
+
+            link.click();
+
+        };
+
+        window.saveToCloud = () => { alert("تم الحفظ في سحابة سلطان!"); };
+
     </script>
+
 </body>
+
 </html>
     
   </body>
