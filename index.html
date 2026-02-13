@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Sultan platform v1.7</title>
+    <title>Sultan platform v1.8</title>
     
 
   </head>
@@ -11,671 +11,695 @@
   <body>
   <!DOCTYPE html>
 
-<html lang="ar" dir="rtl">
+<html lang="en">
 
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan platform v1.7 | منصة سلطان البرمجية</title>
 
-    <title>SULTAN DEV | THE EMPIRE</title>
+    <meta name="description" content="منصة سلطان البرمجية - خدمات بوتات تليجرام، واتساب، وتطوير مواقع متكاملة وإمبراطورية سلطان التقنية.">
+
+    <meta name="keywords" content="Sultan Dev, سلطان ديف, بوت تليجرام, برمجة, تطوير مواقع, ذكاء اصطناعي, إمبراطورية سلطان">
+
+    <meta name="author" content="Sultan Dev">
+
+    <link rel="canonical" href="https://sultandev.com">
+
+    
 
     <meta property="og:title" content="SULTAN DEV | THE EMPIRE">
 
-    <meta property="og:description" content="منصة السلطان للخدمات التقنية المتطورة">
+    <meta property="og:description" content="منصة السلطان للخدمات التقنية المتطورة - استكشف باقاتنا وخدماتنا.">
 
     <meta property="og:image" content="https://i.ibb.co/TByDWdTK/1769685777435.jpg">
 
     <meta property="og:url" content="https://sultandev.com">
 
+    <meta property="og:type" content="website">
+
     <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="image_src" href="https://i.ibb.co/TByDWdTK/1769685777435.jpg">
-
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
-
-    <style>
-
-        :root { 
-
-            --primary: #ffd700; 
-
-            --neon: #00f3ff; 
-
-            --bg: #050505; 
-
-            --card: #111; 
-
-            --border: #222; 
-
-            --text-gray: #888;
-
-            --notify-green: #39ff14;
-
-            --gold: #ffd700;
-
-        }
-
-        
-
-        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
-
-        .sidebar { 
-
-            position: fixed; top: 0; right: -280px; width: 280px; height: 100%; 
-
-            background: rgba(17, 17, 17, 0.98); border-left: 1px solid var(--border); 
-
-            padding: 70px 20px 20px; display: flex; flex-direction: column; gap: 12px; 
-
-            z-index: 1001; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;
-
-        }
-
-        .sidebar.active { right: 0; }
-
-        .menu-icon { 
-
-            position: fixed; top: 15px; right: 20px; z-index: 1002; cursor: pointer; 
-
-            background: var(--card); padding: 10px; border-radius: 8px; border: 1px solid var(--primary); 
-
-            display: flex; flex-direction: column; gap: 4px; 
-
-        }
-
-        .menu-icon span { width: 25px; height: 3px; background: var(--primary); border-radius: 2px; }
-
-        .nav-btn { 
-
-            background: #1a1a1a; border: 1px solid transparent; color: var(--text-gray); 
-
-            padding: 16px; border-radius: 12px; cursor: pointer; text-align: right; 
-
-            font-size: 14px; transition: 0.3s; width: 100%; display: flex; align-items: center; gap: 10px; 
-
-        }
-
-        .nav-btn.active { border: 1px solid var(--neon); color: var(--neon); background: rgba(0, 243, 255, 0.05); }
-
-        .nav-btn:hover { background: #222; color: white; }
-
-        .overlay { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
-
-        .box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); text-align: center; width: 340px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.1); }
-
-        .content-section { height: 100vh; width: 100%; overflow-y: auto; padding-top: 20px; padding-bottom: 120px; box-sizing: border-box; }
-
-        .hidden { display: none !important; }
-
-        .otaku-container { padding: 20px; max-width: 1200px; margin: auto; }
-
-        .section-title { border-right: 5px solid var(--gold); padding-right: 15px; margin: 40px 0 15px; color: var(--gold); font-size: 28px; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-
-        .card { background: #121212; border-radius: 12px; overflow: hidden; border: 1px solid #222; cursor: pointer; position: relative; }
-
-        .card img { width: 100%; height: 260px; object-fit: cover; }
-
-        .view-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: var(--gold); padding: 2px 8px; border-radius: 5px; font-size: 12px; border: 1px solid var(--gold); }
-
-        .admin-panel { background: #0a0a0a; padding: 20px; border-radius: 20px; margin: 20px; border: 1px solid #ff0000; }
-
-        .stat-box { background: #151515; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); }
-
-        .user-row { display: flex; justify-content: space-between; padding: 15px; background: #111; margin-bottom: 8px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-
-        .unread-msg { border-right: 5px solid var(--notify-green); background: #1a2a1a; }
-
-        .chat-bubble { padding: 12px; border-radius: 15px; margin-bottom: 10px; max-width: 80%; position: relative; }
-
-        .sent { background: var(--primary); color: black; align-self: flex-end; margin-right: auto; }
-
-        .received { background: #222; color: white; align-self: flex-start; }
-
-        input, select { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; }
-
-        .withdraw-btn { background: var(--primary); color: black; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
-
-        .docs-tools { display: flex; flex-wrap: wrap; gap: 10px; background: #111; padding: 15px; margin: 10px; border-radius: 12px; border: 1px solid var(--border); }
-
-        .tool-btn { background: #222; color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; transition: 0.3s; }
-
-        .tool-btn:hover { background: var(--primary); color: black; }
-
-        #editor { background: white; color: black; border-radius: 0 0 12px 12px; min-height: 500px; }
-
-        .ql-toolbar { background: #eee !important; border-radius: 12px 12px 0 0; }
-
-        .detail-view { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 20px; }
-
-    </style>
-
-</head>
+    </head>
 
 <body>
 
-    <div class="menu-icon" onclick="toggleSidebar();">
+    <!DOCTYPE html>
 
-        <span></span><span></span><span></span>
+    <html lang="ar" dir="rtl">
 
-    </div>
+    <head>
 
-    <div id="login-screen" class="overlay">
+        <meta charset="UTF-8">
 
-        <div class="box">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            <h1 id="auth-title" style="color: var(--primary);">سلطان ديف</h1>
-
-            <div id="register-fields" class="hidden">
-
-                <input type="text" id="regName" placeholder="اسمك الكريم">
-
-            </div>
-
-            <input type="email" id="userEmail" placeholder="البريد الإلكتروني">
-
-            <input type="password" id="userPass" placeholder="كلمة السر">
-
-            <button onclick="handleAuth()" id="auth-btn" class="withdraw-btn">دخول</button>
-
-            <p onclick="toggleAuth()" id="toggle-text" style="font-size: 12px; cursor: pointer; color: var(--neon); margin-top: 15px;">لا تملك حساب؟ سجل الآن</p>
-
-        </div>
-
-    </div>
-
-    <div class="main-layout" id="mainApp" style="display:none;">
-
-        <div class="sidebar" id="sidebar">
-
-            <h2 style="color: var(--primary); text-align: center;">SULTAN DEV</h2>
-
-            <button class="nav-btn" id="btn-packages" onclick="switchTab('packages')">💎 باقات الخدمات</button>
-
-            <button class="nav-btn" id="btn-otaku" onclick="switchTab('otaku')">☠️ إمبراطورية سلطان</button>
-
-            <button class="nav-btn" id="btn-docs" onclick="switchTab('docs')">📝 مستندات سلطان</button>
-
-            <button class="nav-btn" id="btn-cloud" onclick="switchTab('cloud')">☁️ سلطان كلاود</button>
-
-            <button class="nav-btn" id="btn-private" onclick="switchTab('private')">🔒 الشات الخاص</button>
-
-            <div id="adminLinkArea"></div>
-
-            <button onclick="userLogout()" style="margin-top:auto; padding:10px; color:red; background:none; border:none; cursor:pointer;">تسجيل الخروج</button>
-
-        </div>
-
-        <div class="chat-container">
-
-            <div id="packagesAreaWrap" class="content-section">
-
-                <div style="background: linear-gradient(90deg, #b29400, #ffd700); color: black; padding: 20px; text-align: center; border-radius: 15px; margin: 20px; font-weight: bold;">🚀 عروض منصة سلطان ديف الحصرية</div>
-
-                <div id="packagesList" style="padding:20px;"></div>
-
-            </div>
-
-            <div id="otakuAreaWrap" class="content-section hidden">
-
-                <header style="text-align:center; padding:10px;"><h1 style="color:var(--gold)">إمبراطورية سلطان ☠️</h1></header>
-
-                <div class="otaku-container">
-
-                    <div id="trendingSection">
-
-                        <h2 class="section-title">🔥 الأكثر مشاهدة</h2>
-
-                        <div class="grid" id="trendingGrid"></div>
-
-                    </div>
-
-                    <div id="allFolders"></div>
-
-                </div>
-
-            </div>
-
-            <div id="docsAreaWrap" class="content-section hidden">
-
-                <div class="docs-tools">
-
-                    <input type="text" id="docTitle" value="مستند سلطان - جديد" style="width:200px; color:white; border:1px solid #333; margin:0; padding: 5px;">
-
-                    <button class="tool-btn" onclick="setDocDirection('rtl')">يمين (AR)</button>
-
-                    <button class="tool-btn" onclick="setDocDirection('ltr')">يسار (EN)</button>
-
-                    <button class="tool-btn" style="color: #ffd700;" onclick="saveToCloud()">حفظ سحابي ☁️</button>
-
-                    <button class="tool-btn" onclick="exportPDF()">تحميل PDF 📄</button>
-
-                    <button class="tool-btn" onclick="exportWord()">تحميل Word 📝</button>
-
-                </div>
-
-                <div style="margin:10px;"><div id="editor"></div></div>
-
-            </div>
-
-            <div id="privateAreaWrap" class="content-section hidden">
-
-                <div style="padding:20px;">
-
-                    <div id="chatBox" style="height:60vh; background:#111; border-radius:15px; overflow-y:auto; padding:20px; display:flex; flex-direction:column; border:1px solid var(--border);"></div>
-
-                    <div style="display:flex; gap:10px; margin-top:15px;">
-
-                        <input type="text" id="msgInput" placeholder="اكتب رسالتك هنا..." style="margin:0;">
-
-                        <button onclick="sendMessage()" class="withdraw-btn" style="width:80px; margin:0;">إرسال</button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div id="adminAreaWrap" class="content-section hidden">
-
-                <div class="admin-panel">
-
-                    <h2 style="color:var(--primary); text-align:center;">👑 لوحة السلطان</h2>
-
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
-
-                        <div class="stat-box"><h4>إجمالي الأعضاء</h4><p id="totalUsers">0</p></div>
-
-                        <div class="stat-box"><h4>محادثاتك</h4><p id="myChats">0</p></div>
-
-                    </div>
-
-                    <h3 style="color:var(--neon)">المستخدمين الموزعين عليك:</h3>
-
-                    <div id="assignedUsersList"></div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div id="detailView" class="detail-view">
-
-        <button class="withdraw-btn" style="width:auto;" onclick="closeDetails()">← العودة</button>
-
-        <div id="videoContainer" style="position: relative; padding-bottom: 56.25%; height: 0; margin-top:20px;">
-
-            <iframe id="mainPlayer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
-
-        </div>
-
-        <h1 id="hTitle" style="color:var(--gold);"></h1>
-
-    </div>
-
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <script type="module">
-
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, query, where, orderBy, addDoc, limit, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = { apiKey: "AIzaSyCRRykMJG9x2QjXL7zvr5bFHExaLgbvK8o", authDomain: "bot-trading-175e2.firebaseapp.com", projectId: "bot-trading-175e2", appId: "1:258267116344:web:096d5e348c75c9764207cd" };
-
-        const otakuConfig = { apiKey: "AIzaSyDBJ_ABxdFTp1_MDMqoRYAev0_EAvbobvQ", projectId: "sultan-2aae3", appId: "1:28005518818:web:4a79ea71bb4c8adaa7fdbb" };
+        <title>SULTAN DEV | THE EMPIRE</title>
 
         
 
-        const app = initializeApp(firebaseConfig);
+        <link rel="image_src" href="https://i.ibb.co/TByDWdTK/1769685777435.jpg">
 
-        const otakuApp = initializeApp(otakuConfig, "otakuApp");
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-        const auth = getAuth(app);
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
-        const db = getFirestore(app);
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-        const dbOtaku = getFirestore(otakuApp);
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        const ADMINS = ["mostafa@admin.com", "mohamed@admin.com", "marco@admin.com", "ahmed@admin.com"];
+        <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
 
-        let isLoginMode = true;
+        <style>
 
-        // --- نظام الروابط الذكي (Sultan Routing) ---
+            /* التنسيقات (كما هي بدون تغيير) */
 
-        window.switchTab = (tab, updateUrl = true) => {
+            :root { 
 
-            // فحص صلاحية الدخول للوحة الأدمن عبر الرابط
+                --primary: #ffd700; 
 
-            if (tab === 'admin' && !ADMINS.includes(auth.currentUser?.email?.toLowerCase())) {
+                --neon: #00f3ff; 
 
-                alert("غير مسموح لك بالدخول هنا!");
+                --bg: #050505; 
 
-                tab = 'packages';
+                --card: #111; 
 
-            }
+                --border: #222; 
 
-            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+                --text-gray: #888;
 
-            const target = document.getElementById(tab + 'AreaWrap');
+                --notify-green: #39ff14;
 
-            if (target) target.classList.remove('hidden');
-
-            document.getElementById('sidebar').classList.remove('active');
-
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-            const activeBtn = document.getElementById('btn-' + tab);
-
-            if (activeBtn) activeBtn.classList.add('active');
-
-            // تحديث الرابط في المتصفح
-
-            if (updateUrl) {
-
-                history.pushState({ tab: tab }, "", "#" + tab);
+                --gold: #ffd700;
 
             }
 
-        };
+            
 
-        // التعامل مع زر الرجوع في المتصفح والروابط المباشرة
+            body { font-family: 'Cairo', sans-serif; background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
 
-        window.onpopstate = (event) => {
+            .sidebar { 
 
-            const tab = window.location.hash.replace('#', '') || 'packages';
+                position: fixed; top: 0; right: -280px; width: 280px; height: 100%; 
 
-            switchTab(tab, false);
+                background: rgba(17, 17, 17, 0.98); border-left: 1px solid var(--border); 
 
-        };
+                padding: 70px 20px 20px; display: flex; flex-direction: column; gap: 12px; 
 
-        window.toggleAuth = () => {
+                z-index: 1001; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box;
 
-            isLoginMode = !isLoginMode;
+            }
 
-            document.getElementById('register-fields').classList.toggle('hidden');
+            .sidebar.active { right: 0; }
 
-            document.getElementById('auth-title').innerText = isLoginMode ? "سلطان ديف" : "انضم للإمبراطورية";
+            .menu-icon { 
 
-            document.getElementById('auth-btn').innerText = isLoginMode ? "دخول" : "إنشاء حساب";
+                position: fixed; top: 15px; right: 20px; z-index: 1002; cursor: pointer; 
 
-            document.getElementById('toggle-text').innerText = isLoginMode ? "لا تملك حساب؟ سجل الآن" : "لديك حساب؟ سجل دخولك";
+                background: var(--card); padding: 10px; border-radius: 8px; border: 1px solid var(--primary); 
 
-        };
+                display: flex; flex-direction: column; gap: 4px; 
 
-        window.handleAuth = async () => {
+            }
 
-            const email = userEmail.value; const pass = userPass.value;
+            .menu-icon span { width: 25px; height: 3px; background: var(--primary); border-radius: 2px; }
 
-            try {
+            .nav-btn { 
 
-                if (isLoginMode) { await signInWithEmailAndPassword(auth, email, pass); } 
+                background: #1a1a1a; border: 1px solid transparent; color: var(--text-gray); 
 
-                else {
+                padding: 16px; border-radius: 12px; cursor: pointer; text-align: right; 
 
-                    const res = await createUserWithEmailAndPassword(auth, email, pass);
+                font-size: 14px; transition: 0.3s; width: 100%; display: flex; align-items: center; gap: 10px; 
 
-                    const assignedTo = ADMINS[Math.floor(Math.random() * ADMINS.length)];
+            }
 
-                    await setDoc(doc(db, "users", res.user.uid), { name: regName.value, email: email, assignedTo: assignedTo, createdAt: serverTimestamp(), hasUnread: false });
+            .nav-btn.active { border: 1px solid var(--neon); color: var(--neon); background: rgba(0, 243, 255, 0.05); }
+
+            .nav-btn:hover { background: #222; color: white; }
+
+            .overlay { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); }
+
+            .box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--primary); text-align: center; width: 340px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.1); }
+
+            .content-section { height: 100vh; width: 100%; overflow-y: auto; padding-top: 20px; padding-bottom: 120px; box-sizing: border-box; }
+
+            .hidden { display: none !important; }
+
+            .otaku-container { padding: 20px; max-width: 1200px; margin: auto; }
+
+            .section-title { border-right: 5px solid var(--gold); padding-right: 15px; margin: 40px 0 15px; color: var(--gold); font-size: 28px; }
+
+            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+
+            .card { background: #121212; border-radius: 12px; overflow: hidden; border: 1px solid #222; cursor: pointer; position: relative; }
+
+            .card img { width: 100%; height: 260px; object-fit: cover; }
+
+            .view-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: var(--gold); padding: 2px 8px; border-radius: 5px; font-size: 12px; border: 1px solid var(--gold); }
+
+            .admin-panel { background: #0a0a0a; padding: 20px; border-radius: 20px; margin: 20px; border: 1px solid #ff0000; }
+
+            .stat-box { background: #151515; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); }
+
+            .user-row { display: flex; justify-content: space-between; padding: 15px; background: #111; margin-bottom: 8px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+
+            .unread-msg { border-right: 5px solid var(--notify-green); background: #1a2a1a; }
+
+            .chat-bubble { padding: 12px; border-radius: 15px; margin-bottom: 10px; max-width: 80%; position: relative; }
+
+            .sent { background: var(--primary); color: black; align-self: flex-end; margin-right: auto; }
+
+            .received { background: #222; color: white; align-self: flex-start; }
+
+            input, select { width: 100%; background: #000; border: 1px solid var(--border); color: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; }
+
+            .withdraw-btn { background: var(--primary); color: black; width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+
+            .docs-tools { display: flex; flex-wrap: wrap; gap: 10px; background: #111; padding: 15px; margin: 10px; border-radius: 12px; border: 1px solid var(--border); }
+
+            .tool-btn { background: #222; color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; transition: 0.3s; }
+
+            .tool-btn:hover { background: var(--primary); color: black; }
+
+            #editor { background: white; color: black; border-radius: 0 0 12px 12px; min-height: 500px; }
+
+            .ql-toolbar { background: #eee !important; border-radius: 12px 12px 0 0; }
+
+            .detail-view { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 20px; }
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="menu-icon" onclick="toggleSidebar();">
+
+            <span></span><span></span><span></span>
+
+        </div>
+
+        <div id="login-screen" class="overlay">
+
+            <div class="box">
+
+                <h1 id="auth-title" style="color: var(--primary);">سلطان ديف</h1>
+
+                <div id="register-fields" class="hidden">
+
+                    <input type="text" id="regName" placeholder="اسمك الكريم">
+
+                </div>
+
+                <input type="email" id="userEmail" placeholder="البريد الإلكتروني">
+
+                <input type="password" id="userPass" placeholder="كلمة السر">
+
+                <button onclick="handleAuth()" id="auth-btn" class="withdraw-btn">دخول</button>
+
+                <p onclick="toggleAuth()" id="toggle-text" style="font-size: 12px; cursor: pointer; color: var(--neon); margin-top: 15px;">لا تملك حساب؟ سجل الآن</p>
+
+            </div>
+
+        </div>
+
+        <div class="main-layout" id="mainApp" style="display:none;">
+
+            <div class="sidebar" id="sidebar">
+
+                <h2 style="color: var(--primary); text-align: center;">SULTAN DEV</h2>
+
+                <button class="nav-btn" id="btn-packages" onclick="switchTab('packages')">💎 باقات الخدمات</button>
+
+                <button class="nav-btn" id="btn-otaku" onclick="switchTab('otaku')">☠️ إمبراطورية سلطان</button>
+
+                <button class="nav-btn" id="btn-docs" onclick="switchTab('docs')">📝 مستندات سلطان</button>
+
+                <button class="nav-btn" id="btn-cloud" onclick="switchTab('cloud')">☁️ سلطان كلاود</button>
+
+                <button class="nav-btn" id="btn-private" onclick="switchTab('private')">🔒 الشات الخاص</button>
+
+                <div id="adminLinkArea"></div>
+
+                <button onclick="userLogout()" style="margin-top:auto; padding:10px; color:red; background:none; border:none; cursor:pointer;">تسجيل الخروج</button>
+
+            </div>
+
+            <div class="chat-container">
+
+                <div id="packagesAreaWrap" class="content-section">
+
+                    <div style="background: linear-gradient(90deg, #b29400, #ffd700); color: black; padding: 20px; text-align: center; border-radius: 15px; margin: 20px; font-weight: bold;">🚀 عروض منصة سلطان ديف الحصرية</div>
+
+                    <div id="packagesList" style="padding:20px;"></div>
+
+                </div>
+
+                <div id="otakuAreaWrap" class="content-section hidden">
+
+                    <header style="text-align:center; padding:10px;"><h1 style="color:var(--gold)">إمبراطورية سلطان ☠️</h1></header>
+
+                    <div class="otaku-container">
+
+                        <div id="trendingSection">
+
+                            <h2 class="section-title">🔥 الأكثر مشاهدة</h2>
+
+                            <div class="grid" id="trendingGrid"></div>
+
+                        </div>
+
+                        <div id="allFolders"></div>
+
+                    </div>
+
+                </div>
+
+                <div id="docsAreaWrap" class="content-section hidden">
+
+                    <div class="docs-tools">
+
+                        <input type="text" id="docTitle" value="مستند سلطان - جديد" style="width:200px; color:white; border:1px solid #333; margin:0; padding: 5px;">
+
+                        <button class="tool-btn" onclick="setDocDirection('rtl')">يمين (AR)</button>
+
+                        <button class="tool-btn" onclick="setDocDirection('ltr')">يسار (EN)</button>
+
+                        <button class="tool-btn" style="color: #ffd700;" onclick="saveToCloud()">حفظ سحابي ☁️</button>
+
+                        <button class="tool-btn" onclick="exportPDF()">تحميل PDF 📄</button>
+
+                        <button class="tool-btn" onclick="exportWord()">تحميل Word 📝</button>
+
+                    </div>
+
+                    <div style="margin:10px;"><div id="editor"></div></div>
+
+                </div>
+
+                <div id="privateAreaWrap" class="content-section hidden">
+
+                    <div style="padding:20px;">
+
+                        <div id="chatBox" style="height:60vh; background:#111; border-radius:15px; overflow-y:auto; padding:20px; display:flex; flex-direction:column; border:1px solid var(--border);"></div>
+
+                        <div style="display:flex; gap:10px; margin-top:15px;">
+
+                            <input type="text" id="msgInput" placeholder="اكتب رسالتك هنا..." style="margin:0;">
+
+                            <button onclick="sendMessage()" class="withdraw-btn" style="width:80px; margin:0;">إرسال</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="adminAreaWrap" class="content-section hidden">
+
+                    <div class="admin-panel">
+
+                        <h2 style="color:var(--primary); text-align:center;">👑 لوحة السلطان</h2>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+
+                            <div class="stat-box"><h4>إجمالي الأعضاء</h4><p id="totalUsers">0</p></div>
+
+                            <div class="stat-box"><h4>محادثاتك</h4><p id="myChats">0</p></div>
+
+                        </div>
+
+                        <h3 style="color:var(--neon)">المستخدمين الموزعين عليك:</h3>
+
+                        <div id="assignedUsersList"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="detailView" class="detail-view">
+
+            <button class="withdraw-btn" style="width:auto;" onclick="closeDetails()">← العودة</button>
+
+            <div id="videoContainer" style="position: relative; padding-bottom: 56.25%; height: 0; margin-top:20px;">
+
+                <iframe id="mainPlayer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+
+            </div>
+
+            <h1 id="hTitle" style="color:var(--gold);"></h1>
+
+        </div>
+
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+        <script type="module">
+
+            /* الأكواد البرمجية (كما هي بدون تغيير) */
+
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+            import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+            import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, query, where, orderBy, addDoc, limit, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+            const firebaseConfig = { apiKey: "AIzaSyCRRykMJG9x2QjXL7zvr5bFHExaLgbvK8o", authDomain: "bot-trading-175e2.firebaseapp.com", projectId: "bot-trading-175e2", appId: "1:258267116344:web:096d5e348c75c9764207cd" };
+
+            const otakuConfig = { apiKey: "AIzaSyDBJ_ABxdFTp1_MDMqoRYAev0_EAvbobvQ", projectId: "sultan-2aae3", appId: "1:28005518818:web:4a79ea71bb4c8adaa7fdbb" };
+
+            
+
+            const app = initializeApp(firebaseConfig);
+
+            const otakuApp = initializeApp(otakuConfig, "otakuApp");
+
+            const auth = getAuth(app);
+
+            const db = getFirestore(app);
+
+            const dbOtaku = getFirestore(otakuApp);
+
+            const ADMINS = ["mostafa@admin.com", "mohamed@admin.com", "marco@admin.com", "ahmed@admin.com"];
+
+            let isLoginMode = true;
+
+            window.switchTab = (tab, updateUrl = true) => {
+
+                if (tab === 'admin' && !ADMINS.includes(auth.currentUser?.email?.toLowerCase())) {
+
+                    alert("غير مسموح لك بالدخول هنا!");
+
+                    tab = 'packages';
 
                 }
 
-            } catch (e) { alert("حدث خطأ: " + e.message); }
+                document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
 
-        };
+                const target = document.getElementById(tab + 'AreaWrap');
 
-        onAuthStateChanged(auth, async (user) => {
+                if (target) target.classList.remove('hidden');
 
-            if (user) {
+                document.getElementById('sidebar').classList.remove('active');
 
-                document.getElementById('login-screen').classList.add('hidden');
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-                document.getElementById('mainApp').style.display = 'block';
+                const activeBtn = document.getElementById('btn-' + tab);
 
-                if (ADMINS.includes(user.email.toLowerCase())) setupAdmin(user.email.toLowerCase());
+                if (activeBtn) activeBtn.classList.add('active');
 
-                
+                if (updateUrl) {
 
-                loadOtakuContent(); 
-
-                loadUserMessages(user.uid);
-
-                // فتح الصفحة بناءً على الرابط المنسوخ
-
-                const initialTab = window.location.hash.replace('#', '') || 'packages';
-
-                switchTab(initialTab, false);
-
-            } else {
-
-                document.getElementById('login-screen').classList.remove('hidden');
-
-                document.getElementById('mainApp').style.display = 'none';
-
-            }
-
-        });
-
-        function setupAdmin(adminEmail) {
-
-            document.getElementById('adminLinkArea').innerHTML = `<button class="nav-btn" id="btn-admin" style="color:red; border:1px solid red;" onclick="switchTab('admin')">👑 لوحة السلطان</button>`;
-
-            const q = query(collection(db, "users"), where("assignedTo", "==", adminEmail));
-
-            onSnapshot(q, (snap) => {
-
-                const list = document.getElementById('assignedUsersList');
-
-                list.innerHTML = "";
-
-                document.getElementById('myChats').innerText = snap.size;
-
-                snap.forEach(doc => {
-
-                    const u = doc.data();
-
-                    const div = document.createElement('div');
-
-                    div.className = `user-row ${u.hasUnread ? 'unread-msg' : ''}`;
-
-                    div.innerHTML = `<span>👤 ${u.name}</span> <span>${u.hasUnread ? '🟢 رسالة جديدة' : ''}</span>`;
-
-                    div.onclick = () => { updateDoc(doc.ref, { hasUnread: false }); switchTab('private'); loadUserMessages(doc.id); };
-
-                    list.appendChild(div);
-
-                });
-
-            });
-
-            onSnapshot(collection(db, "users"), snap => document.getElementById('totalUsers').innerText = snap.size);
-
-        }
-
-        window.sendMessage = async () => {
-
-            const text = msgInput.value; if(!text) return;
-
-            const uid = auth.currentUser.uid;
-
-            await addDoc(collection(db, `chats/${uid}/messages`), { text: text, sender: uid, time: serverTimestamp() });
-
-            if (!ADMINS.includes(auth.currentUser.email)) await updateDoc(doc(db, "users", uid), { hasUnread: true });
-
-            msgInput.value = "";
-
-        };
-
-        function loadUserMessages(uid) {
-
-            const q = query(collection(db, `chats/${uid}/messages`), orderBy("time", "asc"));
-
-            onSnapshot(q, (snap) => {
-
-                const box = document.getElementById('chatBox'); box.innerHTML = "";
-
-                snap.forEach(m => {
-
-                    const data = m.data();
-
-                    box.innerHTML += `<div class="chat-bubble ${data.sender === auth.currentUser.uid ? 'sent' : 'received'}">${data.text}</div>`;
-
-                });
-
-                box.scrollTop = box.scrollHeight;
-
-            });
-
-        }
-
-        function loadOtakuContent() {
-
-            onSnapshot(query(collection(dbOtaku, "sultan_library"), orderBy("views", "desc"), limit(5)), (snap) => {
-
-                const grid = document.getElementById('trendingGrid'); grid.innerHTML = "";
-
-                snap.forEach(d => grid.appendChild(createCard(d.data(), d.id)));
-
-            });
-
-            onSnapshot(collection(dbOtaku, "sultan_library"), (snap) => {
-
-                const container = document.getElementById('allFolders'); container.innerHTML = "";
-
-                const folders = {};
-
-                snap.forEach(d => {
-
-                    const data = d.data();
-
-                    if(!folders[data.folder]) folders[data.folder] = [];
-
-                    folders[data.folder].push({...data, id: d.id});
-
-                });
-
-                for(let f in folders) {
-
-                    const sec = document.createElement('div');
-
-                    sec.innerHTML = `<h2 class="section-title">📂 ${f}</h2><div class="grid"></div>`;
-
-                    folders[f].forEach(item => sec.querySelector('.grid').appendChild(createCard(item, item.id)));
-
-                    container.appendChild(sec);
+                    history.pushState({ tab: tab }, "", "#" + tab);
 
                 }
-
-            });
-
-        }
-
-        function createCard(d, id) {
-
-            const div = document.createElement('div'); div.className = 'card';
-
-            div.onclick = () => {
-
-                document.getElementById('hTitle').innerText = d.title;
-
-                document.getElementById('mainPlayer').src = d.video.replace('/view', '/preview');
-
-                document.getElementById('detailView').style.display = 'block';
-
-                updateDoc(doc(dbOtaku, "sultan_library", id), { views: increment(1) });
 
             };
 
-            div.innerHTML = `<div class="view-badge">👁️ ${d.views || 0}</div><img src="${d.thumb}"><h3>${d.title}</h3>`;
+            window.onpopstate = (event) => {
 
-            return div;
+                const tab = window.location.hash.replace('#', '') || 'packages';
 
-        }
+                switchTab(tab, false);
 
-        window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
+            };
 
-        window.userLogout = () => signOut(auth).then(() => location.reload());
+            window.toggleAuth = () => {
 
-        window.closeDetails = () => { document.getElementById('detailView').style.display = 'none'; document.getElementById('mainPlayer').src = ""; };
+                isLoginMode = !isLoginMode;
 
-        const quill = new Quill('#editor', { theme: 'snow' });
+                document.getElementById('register-fields').classList.toggle('hidden');
 
-        window.setDocDirection = (dir) => {
+                document.getElementById('auth-title').innerText = isLoginMode ? "سلطان ديف" : "انضم للإمبراطورية";
 
-            const editor = document.querySelector('.ql-editor');
+                document.getElementById('auth-btn').innerText = isLoginMode ? "دخول" : "إنشاء حساب";
 
-            editor.style.direction = dir;
+                document.getElementById('toggle-text').innerText = isLoginMode ? "لا تملك حساب؟ سجل الآن" : "لديك حساب؟ سجل دخولك";
 
-            editor.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+            };
 
-        };
+            window.handleAuth = async () => {
 
-        window.exportPDF = async () => {
+                const email = userEmail.value; const pass = userPass.value;
 
-            const { jsPDF } = window.jspdf;
+                try {
 
-            const element = document.querySelector('.ql-editor');
+                    if (isLoginMode) { await signInWithEmailAndPassword(auth, email, pass); } 
 
-            const title = document.getElementById('docTitle').value;
+                    else {
 
-            try {
+                        const res = await createUserWithEmailAndPassword(auth, email, pass);
 
-                const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+                        const assignedTo = ADMINS[Math.floor(Math.random() * ADMINS.length)];
 
-                const imgData = canvas.toDataURL('image/png');
+                        await setDoc(doc(db, "users", res.user.uid), { name: regName.value, email: email, assignedTo: assignedTo, createdAt: serverTimestamp(), hasUnread: false });
 
-                const pdf = new jsPDF('p', 'mm', 'a4');
+                    }
 
-                const pdfWidth = pdf.internal.pageSize.getWidth();
+                } catch (e) { alert("حدث خطأ: " + e.message); }
 
-                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            };
 
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            onAuthStateChanged(auth, async (user) => {
 
-                pdf.save(`${title}.pdf`);
+                if (user) {
 
-            } catch (err) { alert("خطأ في التحميل"); }
+                    document.getElementById('login-screen').classList.add('hidden');
 
-        };
+                    document.getElementById('mainApp').style.display = 'block';
 
-        window.exportWord = () => {
+                    if (ADMINS.includes(user.email.toLowerCase())) setupAdmin(user.email.toLowerCase());
 
-            const content = document.querySelector('.ql-editor').innerHTML;
+                    loadOtakuContent(); 
 
-            const title = document.getElementById('docTitle').value;
+                    loadUserMessages(user.uid);
 
-            const converted = htmlDocx.asBlob(`<html><head><meta charset="UTF-8"></head><body dir="rtl">${content}</body></html>`);
+                    const initialTab = window.location.hash.replace('#', '') || 'packages';
 
-            const link = document.createElement('a');
+                    switchTab(initialTab, false);
 
-            link.href = URL.createObjectURL(converted);
+                } else {
 
-            link.download = title + '.docx';
+                    document.getElementById('login-screen').classList.remove('hidden');
 
-            link.click();
+                    document.getElementById('mainApp').style.display = 'none';
 
-        };
+                }
 
-        window.saveToCloud = () => { alert("تم الحفظ في سحابة سلطان!"); };
+            });
 
-    </script>
+            function setupAdmin(adminEmail) {
+
+                document.getElementById('adminLinkArea').innerHTML = `<button class="nav-btn" id="btn-admin" style="color:red; border:1px solid red;" onclick="switchTab('admin')">👑 لوحة السلطان</button>`;
+
+                const q = query(collection(db, "users"), where("assignedTo", "==", adminEmail));
+
+                onSnapshot(q, (snap) => {
+
+                    const list = document.getElementById('assignedUsersList');
+
+                    list.innerHTML = "";
+
+                    document.getElementById('myChats').innerText = snap.size;
+
+                    snap.forEach(doc => {
+
+                        const u = doc.data();
+
+                        const div = document.createElement('div');
+
+                        div.className = `user-row ${u.hasUnread ? 'unread-msg' : ''}`;
+
+                        div.innerHTML = `<span>👤 ${u.name}</span> <span>${u.hasUnread ? '🟢 رسالة جديدة' : ''}</span>`;
+
+                        div.onclick = () => { updateDoc(doc.ref, { hasUnread: false }); switchTab('private'); loadUserMessages(doc.id); };
+
+                        list.appendChild(div);
+
+                    });
+
+                });
+
+                onSnapshot(collection(db, "users"), snap => document.getElementById('totalUsers').innerText = snap.size);
+
+            }
+
+            window.sendMessage = async () => {
+
+                const text = msgInput.value; if(!text) return;
+
+                const uid = auth.currentUser.uid;
+
+                await addDoc(collection(db, `chats/${uid}/messages`), { text: text, sender: uid, time: serverTimestamp() });
+
+                if (!ADMINS.includes(auth.currentUser.email)) await updateDoc(doc(db, "users", uid), { hasUnread: true });
+
+                msgInput.value = "";
+
+            };
+
+            function loadUserMessages(uid) {
+
+                const q = query(collection(db, `chats/${uid}/messages`), orderBy("time", "asc"));
+
+                onSnapshot(q, (snap) => {
+
+                    const box = document.getElementById('chatBox'); box.innerHTML = "";
+
+                    snap.forEach(m => {
+
+                        const data = m.data();
+
+                        box.innerHTML += `<div class="chat-bubble ${data.sender === auth.currentUser.uid ? 'sent' : 'received'}">${data.text}</div>`;
+
+                    });
+
+                    box.scrollTop = box.scrollHeight;
+
+                });
+
+            }
+
+            function loadOtakuContent() {
+
+                onSnapshot(query(collection(dbOtaku, "sultan_library"), orderBy("views", "desc"), limit(5)), (snap) => {
+
+                    const grid = document.getElementById('trendingGrid'); grid.innerHTML = "";
+
+                    snap.forEach(d => grid.appendChild(createCard(d.data(), d.id)));
+
+                });
+
+                onSnapshot(collection(dbOtaku, "sultan_library"), (snap) => {
+
+                    const container = document.getElementById('allFolders'); container.innerHTML = "";
+
+                    const folders = {};
+
+                    snap.forEach(d => {
+
+                        const data = d.data();
+
+                        if(!folders[data.folder]) folders[data.folder] = [];
+
+                        folders[data.folder].push({...data, id: d.id});
+
+                    });
+
+                    for(let f in folders) {
+
+                        const sec = document.createElement('div');
+
+                        sec.innerHTML = `<h2 class="section-title">📂 ${f}</h2><div class="grid"></div>`;
+
+                        folders[f].forEach(item => sec.querySelector('.grid').appendChild(createCard(item, item.id)));
+
+                        container.appendChild(sec);
+
+                    }
+
+                });
+
+            }
+
+            function createCard(d, id) {
+
+                const div = document.createElement('div'); div.className = 'card';
+
+                div.onclick = () => {
+
+                    document.getElementById('hTitle').innerText = d.title;
+
+                    document.getElementById('mainPlayer').src = d.video.replace('/view', '/preview');
+
+                    document.getElementById('detailView').style.display = 'block';
+
+                    updateDoc(doc(dbOtaku, "sultan_library", id), { views: increment(1) });
+
+                };
+
+                div.innerHTML = `<div class="view-badge">👁️ ${d.views || 0}</div><img src="${d.thumb}"><h3>${d.title}</h3>`;
+
+                return div;
+
+            }
+
+            window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
+
+            window.userLogout = () => signOut(auth).then(() => location.reload());
+
+            window.closeDetails = () => { document.getElementById('detailView').style.display = 'none'; document.getElementById('mainPlayer').src = ""; };
+
+            const quill = new Quill('#editor', { theme: 'snow' });
+
+            window.setDocDirection = (dir) => {
+
+                const editor = document.querySelector('.ql-editor');
+
+                editor.style.direction = dir;
+
+                editor.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+
+            };
+
+            window.exportPDF = async () => {
+
+                const { jsPDF } = window.jspdf;
+
+                const element = document.querySelector('.ql-editor');
+
+                const title = document.getElementById('docTitle').value;
+
+                try {
+
+                    const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+
+                    const imgData = canvas.toDataURL('image/png');
+
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+                    pdf.save(`${title}.pdf`);
+
+                } catch (err) { alert("خطأ في التحميل"); }
+
+            };
+
+            window.exportWord = () => {
+
+                const content = document.querySelector('.ql-editor').innerHTML;
+
+                const title = document.getElementById('docTitle').value;
+
+                const converted = htmlDocx.asBlob(`<html><head><meta charset="UTF-8"></head><body dir="rtl">${content}</body></html>`);
+
+                const link = document.createElement('a');
+
+                link.href = URL.createObjectURL(converted);
+
+                link.download = title + '.docx';
+
+                link.click();
+
+            };
+
+            window.saveToCloud = () => { alert("تم الحفظ في سحابة سلطان!"); };
+
+        </script>
+
+    </body>
+
+    </html>
 
 </body>
 
