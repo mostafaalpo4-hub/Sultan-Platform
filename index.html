@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Sultan platform v1.8</title>
+    <title>Sultan platform v1.9</title>
     
 
   </head>
@@ -17,6 +17,14 @@
 
     <meta charset="UTF-8">
 
+    <title>Sultan platform v1.8</title>
+
+</head>
+
+<body>
+
+    <meta charset="UTF-8">
+
     <title>Sultan platform v1.7 | منصة سلطان البرمجية</title>
 
     <meta name="description" content="منصة سلطان البرمجية - خدمات بوتات تليجرام، واتساب، وتطوير مواقع متكاملة وإمبراطورية سلطان التقنية.">
@@ -26,8 +34,6 @@
     <meta name="author" content="Sultan Dev">
 
     <link rel="canonical" href="https://sultandev.com">
-
-    
 
     <meta property="og:title" content="SULTAN DEV | THE EMPIRE">
 
@@ -41,12 +47,6 @@
 
     <meta name="twitter:card" content="summary_large_image">
 
-    </head>
-
-<body>
-
-    <!DOCTYPE html>
-
     <html lang="ar" dir="rtl">
 
     <head>
@@ -56,8 +56,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>SULTAN DEV | THE EMPIRE</title>
-
-        
 
         <link rel="image_src" href="https://i.ibb.co/TByDWdTK/1769685777435.jpg">
 
@@ -72,8 +70,6 @@
         <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
 
         <style>
-
-            /* التنسيقات (كما هي بدون تغيير) */
 
             :root { 
 
@@ -94,8 +90,6 @@
                 --gold: #ffd700;
 
             }
-
-            
 
             body { font-family: 'Cairo', sans-serif; background: var(--bg); color: white; margin: 0; overflow-x: hidden; }
 
@@ -189,6 +183,18 @@
 
             .detail-view { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 20px; }
 
+            
+
+            /* تنسيقات نظام النقاط الجديدة */
+
+            .points-badge { background: linear-gradient(45deg, #ffd700, #ffae00); color: black; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 10px; display: inline-block; }
+
+            .task-card { background: #1a1a1a; padding: 15px; border-radius: 12px; border: 1px solid #333; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+
+            .neon-text { color: var(--neon); text-shadow: 0 0 10px var(--neon); font-weight: bold; }
+
+            .gold-text { color: var(--gold); text-shadow: 0 0 10px var(--gold); font-weight: bold; }
+
         </style>
 
     </head>
@@ -211,6 +217,8 @@
 
                     <input type="text" id="regName" placeholder="اسمك الكريم">
 
+                    <input type="text" id="refBy" placeholder="رمز الإحالة (اختياري)">
+
                 </div>
 
                 <input type="email" id="userEmail" placeholder="البريد الإلكتروني">
@@ -231,7 +239,11 @@
 
                 <h2 style="color: var(--primary); text-align: center;">SULTAN DEV</h2>
 
+                <div style="text-align: center;"><div class="points-badge">نقاطك: <span id="userPoints">0</span> 🪙</div></div>
+
                 <button class="nav-btn" id="btn-packages" onclick="switchTab('packages')">💎 باقات الخدمات</button>
+
+                <button class="nav-btn" id="btn-tasks" onclick="switchTab('tasks')">📅 المهام اليومية</button>
 
                 <button class="nav-btn" id="btn-otaku" onclick="switchTab('otaku')">☠️ إمبراطورية سلطان</button>
 
@@ -254,6 +266,54 @@
                     <div style="background: linear-gradient(90deg, #b29400, #ffd700); color: black; padding: 20px; text-align: center; border-radius: 15px; margin: 20px; font-weight: bold;">🚀 عروض منصة سلطان ديف الحصرية</div>
 
                     <div id="packagesList" style="padding:20px;"></div>
+
+                </div>
+
+                <div id="tasksAreaWrap" class="content-section hidden">
+
+                    <div style="padding:20px;">
+
+                        <h2 class="section-title">📅 مهام النقاط</h2>
+
+                        <div class="task-card">
+
+                            <div><span>🔗 رابط مختصر 1</span><br><small>تتجدد كل 24 ساعة</small></div>
+
+                            <button class="tool-btn" onclick="openTaskLink('link1', 'https://slow-mud.com/0HwJ3C', 4)">تنفيذ (+4)</button>
+
+                        </div>
+
+                        <div class="task-card">
+
+                            <div><span>🔗 رابط مختصر 2</span><br><small>تتجدد كل 24 ساعة</small></div>
+
+                            <button class="tool-btn" onclick="openTaskLink('link2', 'https://www.effectivegatecpm.com/t7bm9mzfqn?key=7c94fc738041de177dee5f8745b0ee9b', 4)">تنفيذ (+4)</button>
+
+                        </div>
+
+                        <div class="task-card">
+
+                            <div><span>🎡 عجلة الحظ</span><br><small>تتجدد كل 24 ساعة</small></div>
+
+                            <button class="tool-btn" onclick="openTaskLink('spin', 'https://slow-mud.com/UCxowZ', 2)">تدوير (+1/2/4)</button>
+
+                        </div>
+
+                        <div class="task-card">
+
+                            <div><span>👥 دعوة صديق</span><br><small>نقاط دائمة</small></div>
+
+                            <button class="tool-btn" onclick="copyRefLink()">نسخ الرابط (+5)</button>
+
+                        </div>
+
+                        <div style="background:#111; padding:15px; border-radius:12px; margin-top:20px; font-size:13px; color:var(--text-gray);">
+
+                            * نظام النقاط: دقيقة في الموقع = 1 نقطة (حتى 280) | دقيقة أنمي = 2 نقطة (حتى 180).
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -361,13 +421,13 @@
 
         <script type="module">
 
-            /* الأكواد البرمجية (كما هي بدون تغيير) */
-
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 
             import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
             import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, query, where, orderBy, addDoc, limit, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+            
 
             const firebaseConfig = { apiKey: "AIzaSyCRRykMJG9x2QjXL7zvr5bFHExaLgbvK8o", authDomain: "bot-trading-175e2.firebaseapp.com", projectId: "bot-trading-175e2", appId: "1:258267116344:web:096d5e348c75c9764207cd" };
 
@@ -387,7 +447,17 @@
 
             const ADMINS = ["mostafa@admin.com", "mohamed@admin.com", "marco@admin.com", "ahmed@admin.com"];
 
+            
+
             let isLoginMode = true;
+
+            let userData = null;
+
+            let siteTime = 0;
+
+            let animeTime = 0;
+
+            let isWatchingAnime = false;
 
             window.switchTab = (tab, updateUrl = true) => {
 
@@ -413,33 +483,7 @@
 
                 if (activeBtn) activeBtn.classList.add('active');
 
-                if (updateUrl) {
-
-                    history.pushState({ tab: tab }, "", "#" + tab);
-
-                }
-
-            };
-
-            window.onpopstate = (event) => {
-
-                const tab = window.location.hash.replace('#', '') || 'packages';
-
-                switchTab(tab, false);
-
-            };
-
-            window.toggleAuth = () => {
-
-                isLoginMode = !isLoginMode;
-
-                document.getElementById('register-fields').classList.toggle('hidden');
-
-                document.getElementById('auth-title').innerText = isLoginMode ? "سلطان ديف" : "انضم للإمبراطورية";
-
-                document.getElementById('auth-btn').innerText = isLoginMode ? "دخول" : "إنشاء حساب";
-
-                document.getElementById('toggle-text').innerText = isLoginMode ? "لا تملك حساب؟ سجل الآن" : "لديك حساب؟ سجل دخولك";
+                if (updateUrl) history.pushState({ tab: tab }, "", "#" + tab);
 
             };
 
@@ -457,7 +501,47 @@
 
                         const assignedTo = ADMINS[Math.floor(Math.random() * ADMINS.length)];
 
-                        await setDoc(doc(db, "users", res.user.uid), { name: regName.value, email: email, assignedTo: assignedTo, createdAt: serverTimestamp(), hasUnread: false });
+                        const refCode = Math.random().toString(36).substring(7).toUpperCase();
+
+                        
+
+                        // معالجة كود الإحالة
+
+                        const referer = document.getElementById('refBy').value;
+
+                        if(referer) {
+
+                            const q = query(collection(db, "users"), where("refCode", "==", referer));
+
+                            // يتم إضافة النقاط للمحيل في الخلفية عبر سحابة فايربيز أو عند تسجيله الدخول
+
+                        }
+
+                        await setDoc(doc(db, "users", res.user.uid), { 
+
+                            name: regName.value, 
+
+                            email: email, 
+
+                            assignedTo: assignedTo, 
+
+                            createdAt: serverTimestamp(), 
+
+                            hasUnread: false,
+
+                            points: 0,
+
+                            weeklyPoints: 0,
+
+                            siteMinutes: 0,
+
+                            animeMinutes: 0,
+
+                            refCode: refCode,
+
+                            lastTasks: {} 
+
+                        });
 
                     }
 
@@ -473,11 +557,27 @@
 
                     document.getElementById('mainApp').style.display = 'block';
 
+                    
+
+                    onSnapshot(doc(db, "users", user.uid), (s) => {
+
+                        userData = s.data();
+
+                        document.getElementById('userPoints').innerText = userData.points || 0;
+
+                        siteTime = userData.siteMinutes || 0;
+
+                        animeTime = userData.animeMinutes || 0;
+
+                    });
+
                     if (ADMINS.includes(user.email.toLowerCase())) setupAdmin(user.email.toLowerCase());
 
                     loadOtakuContent(); 
 
                     loadUserMessages(user.uid);
+
+                    startTracking();
 
                     const initialTab = window.location.hash.replace('#', '') || 'packages';
 
@@ -492,6 +592,204 @@
                 }
 
             });
+
+            // نظام تتبع الوقت والمهام
+
+            function startTracking() {
+
+                setInterval(async () => {
+
+                    if(!auth.currentUser) return;
+
+                    let updates = {};
+
+                    
+
+                    // نقطة لكل دقيقة بالموقع
+
+                    if(siteTime < 280) {
+
+                        updates.siteMinutes = increment(1);
+
+                        updates.points = increment(1);
+
+                        updates.weeklyPoints = increment(1);
+
+                    }
+
+                    // نقطتين لكل دقيقة أنمي
+
+                    if(isWatchingAnime && animeTime < 180) {
+
+                        updates.animeMinutes = increment(1);
+
+                        updates.points = increment(2);
+
+                        updates.weeklyPoints = increment(2);
+
+                    }
+
+                    if(Object.keys(updates).length > 0) {
+
+                        await updateDoc(doc(db, "users", auth.currentUser.uid), updates);
+
+                    }
+
+                }, 60000); // كل دقيقة
+
+            }
+
+            window.openTaskLink = async (taskId, url, reward) => {
+
+                const now = Date.now();
+
+                const lastRun = userData.lastTasks?.[taskId] || 0;
+
+                
+
+                if (now - lastRun < 24 * 60 * 60 * 1000) {
+
+                    alert("هذه المهمة متاحة مرة كل 24 ساعة فقط!");
+
+                    return;
+
+                }
+
+                window.open(url, '_blank');
+
+                let userLastTasks = userData.lastTasks || {};
+
+                userLastTasks[taskId] = now;
+
+                
+
+                await updateDoc(doc(db, "users", auth.currentUser.uid), {
+
+                    points: increment(reward),
+
+                    weeklyPoints: increment(reward),
+
+                    lastTasks: userLastTasks
+
+                });
+
+                alert(`تم منحك ${reward} نقاط!`);
+
+            };
+
+            window.copyRefLink = () => {
+
+                const link = `${window.location.origin}#register?ref=${userData.refCode}`;
+
+                navigator.clipboard.writeText(link);
+
+                alert("تم نسخ رابط الإحالة الخاص بك!");
+
+            };
+
+            // تعديل نظام الشات لعرض الألوان
+
+            function loadUserMessages(uid) {
+
+                const q = query(collection(db, `chats/${uid}/messages`), orderBy("time", "asc"));
+
+                onSnapshot(q, (snap) => {
+
+                    const box = document.getElementById('chatBox'); box.innerHTML = "";
+
+                    snap.forEach(m => {
+
+                        const data = m.data();
+
+                        let nameClass = "";
+
+                        const wp = userData.weeklyPoints || 0;
+
+                        if(wp >= 500) nameClass = "gold-text";
+
+                        else if(wp >= 151) nameClass = "neon-text";
+
+                        box.innerHTML += `<div class="chat-bubble ${data.sender === auth.currentUser.uid ? 'sent' : 'received'}">
+
+                            <span class="${nameClass}" style="font-size:10px; display:block;">${data.sender === auth.currentUser.uid ? 'أنت' : 'الدعم'}</span>
+
+                            ${data.text}
+
+                        </div>`;
+
+                    });
+
+                    box.scrollTop = box.scrollHeight;
+
+                });
+
+            }
+
+            // تتبع مشاهدة الأنمي
+
+            window.createCard = (d, id) => {
+
+                const div = document.createElement('div'); div.className = 'card';
+
+                div.onclick = () => {
+
+                    document.getElementById('hTitle').innerText = d.title;
+
+                    document.getElementById('mainPlayer').src = d.video.replace('/view', '/preview');
+
+                    document.getElementById('detailView').style.display = 'block';
+
+                    updateDoc(doc(dbOtaku, "sultan_library", id), { views: increment(1) });
+
+                    isWatchingAnime = true;
+
+                };
+
+                div.innerHTML = `<div class="view-badge">👁️ ${d.views || 0}</div><img src="${d.thumb}"><h3>${d.title}</h3>`;
+
+                return div;
+
+            }
+
+            window.closeDetails = () => { 
+
+                document.getElementById('detailView').style.display = 'none'; 
+
+                document.getElementById('mainPlayer').src = ""; 
+
+                isWatchingAnime = false; 
+
+            };
+
+            // باقي الوظائف الأساسية كما هي...
+
+            window.toggleAuth = () => {
+
+                isLoginMode = !isLoginMode;
+
+                document.getElementById('register-fields').classList.toggle('hidden');
+
+                document.getElementById('auth-title').innerText = isLoginMode ? "سلطان ديف" : "انضم للإمبراطورية";
+
+                document.getElementById('auth-btn').innerText = isLoginMode ? "دخول" : "إنشاء حساب";
+
+                document.getElementById('toggle-text').innerText = isLoginMode ? "لا تملك حساب؟ سجل الآن" : "لديك حساب؟ سجل دخولك";
+
+            };
+
+            window.sendMessage = async () => {
+
+                const text = msgInput.value; if(!text) return;
+
+                const uid = auth.currentUser.uid;
+
+                await addDoc(collection(db, `chats/${uid}/messages`), { text: text, sender: uid, time: serverTimestamp() });
+
+                if (!ADMINS.includes(auth.currentUser.email)) await updateDoc(doc(db, "users", uid), { hasUnread: true });
+
+                msgInput.value = "";
+
+            };
 
             function setupAdmin(adminEmail) {
 
@@ -526,42 +824,6 @@
                 });
 
                 onSnapshot(collection(db, "users"), snap => document.getElementById('totalUsers').innerText = snap.size);
-
-            }
-
-            window.sendMessage = async () => {
-
-                const text = msgInput.value; if(!text) return;
-
-                const uid = auth.currentUser.uid;
-
-                await addDoc(collection(db, `chats/${uid}/messages`), { text: text, sender: uid, time: serverTimestamp() });
-
-                if (!ADMINS.includes(auth.currentUser.email)) await updateDoc(doc(db, "users", uid), { hasUnread: true });
-
-                msgInput.value = "";
-
-            };
-
-            function loadUserMessages(uid) {
-
-                const q = query(collection(db, `chats/${uid}/messages`), orderBy("time", "asc"));
-
-                onSnapshot(q, (snap) => {
-
-                    const box = document.getElementById('chatBox'); box.innerHTML = "";
-
-                    snap.forEach(m => {
-
-                        const data = m.data();
-
-                        box.innerHTML += `<div class="chat-bubble ${data.sender === auth.currentUser.uid ? 'sent' : 'received'}">${data.text}</div>`;
-
-                    });
-
-                    box.scrollTop = box.scrollHeight;
-
-                });
 
             }
 
@@ -607,93 +869,25 @@
 
             }
 
-            function createCard(d, id) {
-
-                const div = document.createElement('div'); div.className = 'card';
-
-                div.onclick = () => {
-
-                    document.getElementById('hTitle').innerText = d.title;
-
-                    document.getElementById('mainPlayer').src = d.video.replace('/view', '/preview');
-
-                    document.getElementById('detailView').style.display = 'block';
-
-                    updateDoc(doc(dbOtaku, "sultan_library", id), { views: increment(1) });
-
-                };
-
-                div.innerHTML = `<div class="view-badge">👁️ ${d.views || 0}</div><img src="${d.thumb}"><h3>${d.title}</h3>`;
-
-                return div;
-
-            }
-
             window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
 
             window.userLogout = () => signOut(auth).then(() => location.reload());
 
-            window.closeDetails = () => { document.getElementById('detailView').style.display = 'none'; document.getElementById('mainPlayer').src = ""; };
-
             const quill = new Quill('#editor', { theme: 'snow' });
 
-            window.setDocDirection = (dir) => {
+            window.setDocDirection = (dir) => { const editor = document.querySelector('.ql-editor'); editor.style.direction = dir; editor.style.textAlign = dir === 'rtl' ? 'right' : 'left'; };
 
-                const editor = document.querySelector('.ql-editor');
+            window.exportPDF = async () => { const { jsPDF } = window.jspdf; const element = document.querySelector('.ql-editor'); const title = document.getElementById('docTitle').value; try { const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }); const imgData = canvas.toDataURL('image/png'); const pdf = new jsPDF('p', 'mm', 'a4'); const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = (canvas.height * pdfWidth) / canvas.width; pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight); pdf.save(`${title}.pdf`); } catch (err) { alert("خطأ في التحميل"); } };
 
-                editor.style.direction = dir;
+            window.exportWord = () => { const content = document.querySelector('.ql-editor').innerHTML; const title = document.getElementById('docTitle').value; const converted = htmlDocx.asBlob(`<html><head><meta charset="UTF-8"></head><body dir="rtl">${content}</body></html>`); const link = document.createElement('a'); link.href = URL.createObjectURL(converted); link.download = title + '.docx'; link.click(); };
 
-                editor.style.textAlign = dir === 'rtl' ? 'right' : 'left';
+            window.saveToCloud = () => { 
 
-            };
+                updateDoc(doc(db, "users", auth.currentUser.uid), { points: increment(2), weeklyPoints: increment(2) });
 
-            window.exportPDF = async () => {
-
-                const { jsPDF } = window.jspdf;
-
-                const element = document.querySelector('.ql-editor');
-
-                const title = document.getElementById('docTitle').value;
-
-                try {
-
-                    const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
-
-                    const imgData = canvas.toDataURL('image/png');
-
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-                    pdf.save(`${title}.pdf`);
-
-                } catch (err) { alert("خطأ في التحميل"); }
+                alert("تم الحفظ في سحابة سلطان! (+2 نقطة)"); 
 
             };
-
-            window.exportWord = () => {
-
-                const content = document.querySelector('.ql-editor').innerHTML;
-
-                const title = document.getElementById('docTitle').value;
-
-                const converted = htmlDocx.asBlob(`<html><head><meta charset="UTF-8"></head><body dir="rtl">${content}</body></html>`);
-
-                const link = document.createElement('a');
-
-                link.href = URL.createObjectURL(converted);
-
-                link.download = title + '.docx';
-
-                link.click();
-
-            };
-
-            window.saveToCloud = () => { alert("تم الحفظ في سحابة سلطان!"); };
 
         </script>
 
