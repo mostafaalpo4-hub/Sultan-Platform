@@ -1,0 +1,8 @@
+{
+  "name": "Sultan Ultimate Empire v7.0",
+  "description": "An imperial dashboard featuring anime libraries, faith tools, cloud coding, and advanced AI security systems.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
