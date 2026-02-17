@@ -19,39 +19,67 @@ import { doc, onSnapshot, getDoc, updateDoc } from 'firebase/firestore';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [currentPage, setCurrentPage] = useState<Page>(Page.ANIME);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [toast, setToast] = useState<{ message: string; color: string } | null>(null);
 
   useEffect(() => {
+    // Monitor Auth state
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
+        setIsLoadingProfile(true);
         try {
           const userDocRef = doc(db, "users", firebaseUser.uid);
-          const docSnap = await getDoc(userDocRef);
           
+          // Initial check
+          const docSnap = await getDoc(userDocRef);
           if (docSnap.exists()) {
             setUser(docSnap.data() as User);
             
-            // Setup real-time listener for points/xp updates
-            onSnapshot(userDocRef, (ds) => {
-              if (ds.exists()) setUser(ds.data() as User);
+            // Start listening for changes (real-time sync)
+            const unsubProfile = onSnapshot(userDocRef, (ds) => {
+              if (ds.exists()) {
+                setUser(ds.data() as User);
+              }
             });
+            
+            setIsInitializing(false);
+            setIsLoadingProfile(false);
+            return () => unsubProfile();
           } else {
-            // User authenticated but no profile in Firestore (rare case)
-            // Wait a moment for creation or logout to be safe
-            console.warn("User authenticated but no Firestore profile found.");
-            setUser(null);
+            // Profile doc might be still being created by AuthGate
+            // We set a small interval to check again
+            let attempts = 0;
+            const checkInterval = setInterval(async () => {
+              attempts++;
+              const ds = await getDoc(userDocRef);
+              if (ds.exists()) {
+                setUser(ds.data() as User);
+                clearInterval(checkInterval);
+                setIsInitializing(false);
+                setIsLoadingProfile(false);
+              } else if (attempts > 5) { // Stop after ~5 seconds
+                clearInterval(checkInterval);
+                await signOut(auth);
+                setUser(null);
+                setIsInitializing(false);
+                setIsLoadingProfile(false);
+              }
+            }, 1000);
           }
         } catch (error) {
-          console.error("Firebase Error:", error);
+          console.error("Critical Firebase Error:", error);
+          setIsInitializing(false);
+          setIsLoadingProfile(false);
         }
       } else {
         setUser(null);
+        setIsInitializing(false);
+        setIsLoadingProfile(false);
       }
-      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -92,22 +120,23 @@ const App: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    setIsLoading(true);
+    setIsLoadingProfile(true);
     await signOut(auth);
     setUser(null);
     showToast('تم الخروج من العرش بنجاح', '#ff4444');
-    setIsLoading(false);
+    setIsLoadingProfile(false);
   };
 
-  if (isLoading) {
+  if (isInitializing || (isLoadingProfile && !user)) {
     return (
       <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999]">
-        <img src="https://i.ibb.co/cSP0MLbp/image.png" width="80" className="animate-pulse mb-8 drop-shadow-glow" />
-        <div className="w-16 h-1 border-2 border-gray-800 rounded-full overflow-hidden relative">
-          <div className="absolute inset-0 bg-yellow-500 animate-[loading_2s_infinite]"></div>
+        <img src="https://i.ibb.co/cSP0MLbp/image.png" width="80" className="animate-pulse mb-8 drop-shadow-glow" alt="Sultan Logo" />
+        <div className="w-24 loading-bar mb-6">
+          <div className="loading-bar-fill"></div>
         </div>
-        <style>{`@keyframes loading { 0% { left: -100%; } 100% { left: 100%; } }`}</style>
-        <h2 className="mt-6 orbitron text-yellow-500 font-bold tracking-[0.2em] text-xs uppercase">Connecting to Sultan Cloud...</h2>
+        <h2 className="orbitron text-yellow-500 font-bold tracking-[0.3em] text-[10px] uppercase">
+          {isLoadingProfile ? 'Preparing your Empire...' : 'Connecting to Sultan Cloud...'}
+        </h2>
       </div>
     );
   }
