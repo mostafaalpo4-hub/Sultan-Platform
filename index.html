@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -7,59 +8,53 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #050505; color: #ffffff; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
         .orbitron { font-family: 'Orbitron', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #ffd700; border-radius: 10px; }
+        
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite; }
+        
         .sultan-gradient {
             background: linear-gradient(45deg, #ffd700, #b8860b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        /* أنماط مخصصة لمنع الشاشة السوداء */
-        #root { min-height: 100vh; }
+        
+        .drop-shadow-glow {
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+        }
+
+        @keyframes loading { 0% { left: -100%; } 100% { left: 100%; } }
+        .loading-bar { position: relative; overflow: hidden; height: 2px; background: #1a1a1a; border-radius: 10px; }
+        .loading-bar-fill { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background: #ffd700; animation: loading 2s infinite linear; }
     </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js",
+    "firebase/": "https://esm.sh/firebase@^12.9.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
-    <div id="root">
-        <div class="flex items-center justify-center h-screen">
-            <div class="text-yellow-500 text-2xl animate-pulse font-black">جاري فتح أبواب الإمبراطورية...</div>
-        </div>
-    </div>
-
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.2.0",
-        "react-dom": "https://esm.sh/react-dom@18.2.0",
-        "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
-        "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
-        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
-      }
-    }
-    </script>
-
-    <script type="module">
-        import React, { useState, useEffect } from 'react';
-        import ReactDOM from 'react-dom';
-        // هنا سيتم وضع منطق التطبيق الخاص بك بالكامل
-        
-        const App = () => {
-            return (
-                <div class="p-10 text-center">
-                    <h1 class="text-5xl font-black sultan-gradient mb-5">سلطان دييڤ</h1>
-                    <p class="text-gray-400">تم تحويل النظام للعمل مباشرة من المتصفح</p>
-                    <div class="mt-10 grid grid-cols-1 gap-4">
-                        <div class="bg-white/5 p-6 rounded-2xl border border-yellow-500/20">
-                            <i class="fas fa-shield-check text-yellow-500 text-3xl mb-3"></i>
-                            <h2 class="text-xl font-bold">نظام التشغيل المباشر فعال</h2>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        ReactDOM.render(React.createElement(App), document.getElementById('root'));
-    </script>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
