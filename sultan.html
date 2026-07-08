@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="h-full bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan Platform | المنصة الملكية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff', 100: '#edd1ff', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9', 900: '#4c1d95'
+                        }
+                    },
+                    backdropBlur: { xs: '2px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modern Glassmorphism Utilities & Custom Scrollbar */
+        .glass {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-input {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.25);
+            outline: none;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        ::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="h-full font-sans antialiased overflow-x-hidden">
+
+    <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-indigo-900/20 blur-[120px] pointer-events-none -z-10"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-900/20 blur-[120px] pointer-events-none -z-10"></div>
+
+    <div id="app-root" class="min-h-screen flex flex-col justify-between fade-in">
+        <div id="view-content" class="flex-grow"></div>
+    </div>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 left-5 md:left-auto md:w-96 z-50 flex flex-col gap-3"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, onSnapshot, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration Object
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMYRrLa-KA_sIhU-ySJsvjsQuvForpwRw",
+            authDomain: "alpo-f947b.firebaseapp.com",
+            projectId: "alpo-f947b",
+            storageBucket: "alpo-f947b.firebasestorage.app",
+            messagingSenderId: "1052065861400",
+            appId: "1:1052065861400:web:31e0b6704876eed46e986d",
+            measurementId: "G-5M5Z2KD908"
+        };
+
+        // Initialize Application Modules
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // State Engine
+        let currentUser = null;
+        let currentLang = localStorage.getItem('lang') || 'en';
+        let unsubChat = null;
+
+        // Internationalization (i18n) Translations Library
+        const i18n = {
+            en: {
+                brand: "Sultan",
+                tagline: "We build your platform, you reap the success.",
+                heroTitle: "We Build Your Platform. We Grow Your Sales. <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>Zero Upfront Cost.</span>",
+                heroDesc: "We build your complete modern web infrastructure, e-commerce store, and handle operations until you generate sales—all exclusively in exchange for a fair percentage of your net profit.",
+                ctaStart: "Start Your Online Business",
+                ctaLogin: "Login to Dashboard",
+                ctaLogout: "Sign Out",
+                modelTitle: "How Our Shared-Success Model Works",
+                model1: "Pitch & Plan",
+                model1Desc: "Pitch your tech or sales idea through our platform chat directly with our dev architect team.",
+                model2: "Design & Launch",
+                model2Desc: "We deploy premium, lightning-fast solutions under our custom ecosystem ecosystem.",
+                model3: "Profit Together",
+                model3Desc: "We only earn money when you bring sales, taking a negotiated dynamic percentage.",
+                featuresTitle: "Engineered For Peak Performance",
+                feat1: "Automated Global Infrastructure",
+                feat1Desc: "Instant sub-domain setup integrated with dynamic deployment capabilities.",
+                feat2: "Mobile-First Fluid UI",
+                feat2Desc: "Immersive glassmorphism experience built for optimal mobile conversion workflows.",
+                feat3: "Direct AI Matrix Support",
+                feat3Desc: "Direct real-time notification synchronization via Telegram API layers.",
+                prevProjects: "Your Running Subdomains",
+                noProjects: "No active projects under development yet. Click the action button below to spin up operations!",
+                chatTitle: "Sultan Strategy Room",
+                chatPlaceholder: "Type your business concept breakdown here...",
+                email: "Corporate Email Address",
+                password: "Secure Password",
+                authToggleToRegister: "Don't have an account? Pitch your idea here",
+                authToggleToLogin: "Already collaborating? Go back to login",
+                submitAuth: "Authenticate Session",
+                error404Title: "404 Space Portal Lost",
+                error404Desc: "The custom Sultan subdomain node you are looking for has not been provisioned or mapping configuration doesn't exist.",
+                backHome: "Return to Main Hub"
+            },
+            ar: {
+                brand: "سُلطان",
+                tagline: "نحن نبني منصتك، وأنت تحصد النجاح الإمبراطوري.",
+                heroTitle: "نصنع موقعك أو متجرك الإلكتروني بالكامل <span class='text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400'>بـ 0 تكلفة مقدمة!</span>",
+                heroDesc: "نتولى بناء البنية التحتية البرمجية والهوية الرقمية وإدارة المنصة بالكامل حتى تبدأ في تحقيق المبيعات والأرباح الفعلية، مقابل نسبة عادلة متفق عليها من صافي الأرباح فقط.",
+                ctaStart: "ابدأ بعملك عبر الإنترنت",
+                ctaLogin: "تسجيل دخول/انشاء حساب",
+                ctaLogout: "تسجيل الخروج",
+                modelTitle: "كيف يعمل نموذج الشراكة الاستراتيجي؟",
+                model1: "اطرح فكرتك الاستثمارية",
+                model1Desc: "تواصل معنا مباشرة عبر غرف المحادثة المباشرة لعرض خطة العمل والاتفاق على النسبة.",
+                model2: "التطوير والإطلاق السريع",
+                model2Desc: "نقوم بتصميم وبرمجة موقعك بأحدث التقنيات العالمية عبر نطاقاتنا السريعة.",
+                model3: "الأرباح المشتركة والنمو",
+                model3Desc: "لا نربح أي فلس حتى تبدأ منصتك بجني المال الحقيقي. نجاحنا مرتبط تماماً بنجاحك.",
+                featuresTitle: "مواصفات تكنولوجية خارقة لمنصتك",
+                feat1: "بنية تحتية سحابية مؤتمتة",
+                feat1Desc: "إطلاق وتعيين نطاقات فرعية مخصصة فورياً وحقن الأكواد البرمجية بشكل ديناميكي مذهل.",
+                feat2: "واجهات زجاجية متطورة للجوال",
+                feat2Desc: "تصاميم مستوحاة من مبادئ الـ Glassmorphic المرنة مخصصة بالكامل لرفع معدل المبيعات.",
+                feat3: "ربط برمي مدمج ومباشر",
+                feat3Desc: "اتصال ومزامنة إشعارات حية عبر خوادم وتطبيقات الـ Bot الخاصة بنا لضمان تتبع حي.",
+                prevProjects: "المشاريع والنطاقات الفرعية النشطة",
+                noProjects: "لا توجد مشاريع مفعلة حالياً على هذا الحساب البرمجي. اضغط على الزر أدناه لبدء التنفيذ الفوري!",
+                chatTitle: "غرفة التخطيط الإستراتيجي لسلطان",
+                chatPlaceholder: "اكتب تفاصيل فكرتك التجارية، المنتجات المستهدفة، ونسبة الأرباح المقترحة هنا...",
+                email: "البريد الإلكتروني للشركة",
+                password: "كلمة المرور الآمنة",
+                authToggleToRegister: "ليس لديك حساب؟ اطرح فكرتك الاستثمارية الآن وسجل معنا",
+                authToggleToLogin: "مشترك بالفعل؟ سجل دخولك للوحة الإدارة مباشرة",
+                submitAuth: "تأكيد الهوية والدخول",
+                error404Title: "خطأ 404: لم يتم العثور على النطاق المخصص",
+                error404Desc: "النطاق الفرعي التابع لـ Sultan الذي تحاول الوصول إليه غير موجود بقواعد البيانات أو لم يتم ترخيصه بعد.",
+                backHome: "العودة إلى المركز الرئيسي"
+            }
+        };
+
+        // System Toasts Notifications
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = `glass p-4 rounded-xl border flex items-center justify-between shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 text-sm ${
+                type === 'error' ? 'border-red-500/50 text-red-200' : 'border-emerald-500/50 text-emerald-200'
+            }`;
+            toast.innerHTML = `<span>${message}</span><button class="ml-3 text-white/50 hover:text-white" onclick="this.parentElement.remove()">&times;</button>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-2'); setTimeout(() => toast.remove(), 300); }, 4000);
+        }
+
+        // Apply Global Layout Direction and Attributes
+        function updateLayoutDirection() {
+            const html = document.documentElement;
+            html.setAttribute('lang', currentLang);
+            if (currentLang === 'ar') {
+                html.setAttribute('dir', 'rtl');
+                html.classList.replace('font-sans', 'font-sans'); // Can be mapped to Arabic font family if needed
+            } else {
+                html.setAttribute('dir', 'ltr');
+            }
+        }
+
+        // --- SUBDOMAIN OR CUSTOM HOSTNAME ROUTER ROUTING CORE ---
+        async function routeSubdomainsAndContent() {
+            const hostname = window.location.hostname;
+            const parts = hostname.split('.');
+            
+            // Configuration variables for routing domains
+            let isSubdomain = false;
+            let subdomainName = "";
+
+            // If mapping to standard local env or customized subdomains
+            if (parts.length > 2 && parts[0] !== 'www' && !hostname.includes('localhost') && !/^\d/.test(hostname)) {
+                isSubdomain = true;
+                subdomainName = parts[0];
+            } else {
+                // To allow testing subdomains on localhost or testing platforms via query string parameter (?subdomain=demo)
+                const urlParams = new URLSearchParams(window.location.search);
+                if(urlParams.has('subdomain')) {
+                    isSubdomain = true;
+                    subdomainName = urlParams.get('subdomain');
+                }
+            }
+
+            if (isSubdomain) {
+                try {
+                    const q = query(collection(db, "projects"), where("projectName", "==", subdomainName.toLowerCase().trim()));
+                    const querySnapshot = await getDocs(q);
+
+                    if (!querySnapshot.empty) {
+                        const projectData = querySnapshot.docs[0].data();
+                        
+                        // Break out of SPA entirely and inject sandboxed standalone sub-application payload
+                        document.open();
+                        document.write(`
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>${subdomainName.toUpperCase()} | Sultan Sandbox Network</title>
+                                <style>${projectData.cssCode || ''}</style>
+                            </head>
+                            <body>
+                                ${projectData.htmlCode || '<h1>No Content Found</h1>'}
+                                <script>${projectData.jsCode || ''}<\/script>
+                            </body>
+                            </html>
+                        `);
+                        document.close();
+                        return true; 
+                    } else {
+                        render404View();
+                        return true;
+                    }
+                } catch (error) {
+                    console.error("Critical routing fail:", error);
+                    render404View();
+                    return true;
+                }
+            }
+            return false; // Return false to specify handling via global main routes view parser
+        }
+
+        // Global Layout Top Navigation Bar Header Component Template
+        function renderHeader() {
+            const t = i18n[currentLang];
+            return `
+                <header class="glass sticky top-0 z-40 w-full border-b border-white/10 px-4 py-3 md:px-8 flex items-center justify-between">
+                    <div class="flex items-center gap-3 cursor-pointer" onclick="window.navigateToRoute('landing')">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+                            <i class="fa-solid fa-crown text-white text-lg"></i>
+                        </div>
+                        <span class="text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">${t.brand}</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button id="lang-switch-btn" class="glass px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-white/10 transition">
+                            ${currentLang === 'en' ? 'العربية' : 'English'}
+                        </button>
+                        ${currentUser ? `
+                            <button onclick="window.navigateToRoute('dashboard')" class="text-sm font-medium px-3 py-2 text-slate-300 hover:text-white transition hidden md:inline-block">${t.ctaLogin}</button>
+                            <button id="auth-action-btn" class="bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-200 px-4 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i> ${t.ctaLogout}
+                            </button>
+                        ` : `
+                            <button id="auth-action-btn" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white px-5 py-1.5 rounded-lg text-xs font-medium shadow-md transition">
+                                ${t.ctaLogin}
+                            </button>
+                        `}
+                    </div>
+                </header>
+            `;
+        }
+
+        // Global Footnote Component Template
+        function renderFooter() {
+            return `
+                <footer class="border-t border-white/5 py-6 text-center text-xs text-slate-500 glass mt-auto">
+                    <p>© 2026 Sultan Enterprise Inc (sultan.com). All rights reserved. Built on automated modern pipelines.</p>
+                </footer>
+            `;
+        }
+
+        // 1. LANDING PAGE VIEW COMPONENT RENDERER
+        function renderLandingView() {
+            const t = i18n[currentLang];
+            const content = document.getElementById('view-content');
+            
+            content.innerHTML = `
+                ${renderHeader()}
+                <main class="max-w-7xl mx-auto px-4 py-12 md:py-24 flex flex-col gap-24">
+                    <section class="text-center flex flex-col items-center gap-6 max-w-4xl mx-auto">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border-indigo-500/20 text-xs text-indigo-300 font-medium tracking-wide mb-2">
+                            <span class="flex h-2 w-2 rounded-full bg-indigo-400 animate-ping"></span>
+                            ${t.tagline}
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-tight md:leading-none text-white">${t.heroTitle}</h1>
+                        <p class="text-base md:text-lg text-slate-400 font-normal leading-relaxed max-w-2xl">${t.heroDesc}</p>
+                        <div class="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
+                            <button onclick="window.navigateToRoute('dashboard', true)" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm px-8 py-4 rounded-xl shadow-xl shadow-brand-600/20 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-rocket"></i> ${t.ctaStart}
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="flex flex-col gap-12">
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-center text-white tracking-tight">${t.modelTitle}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="glass p-8 rounded-2xl relative overflow-hidden group border-white/5">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-indigo-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition duration-300"></div>
+                                <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-6 font-bold">1</div>
+                                <h3 class="text-lg font-bold text-white mb-2">${t.model1}</h3>
+                                <p class="text-sm text-slate-400 leading-relaxed">${t.model1Desc}</p>
+                            </div>
+                            <div class="glass p-8 rounded-2xl relative overflow-hidden group border-white/5">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-pink-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition duration-300"></div>
+                                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-6 font-bold">2</div>
+                                <h3 class="text-lg font-bold text-white mb-2">${t.model2}</h3>
+                                <p class="text-sm text-slate-400 leading-relaxed">${t.model2Desc}</p>
+                            </div>
+                            <div class="glass p-8 rounded-2xl relative overflow-hidden group border-white/5">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-brand-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition duration-300"></div>
+                                <div class="w-12 h-12 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-xl mb-6 font-bold">3</div>
+                                <h3 class="text-lg font-bold text-white mb-2">${t.model3}</h3>
+                                <p class="text-sm text-slate-400 leading-relaxed">${t.model3Desc}</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="flex flex-col gap-12 bg-gradient-to-b from-transparent to-brand-950/10 rounded-3xl p-4 md:p-8 border border-white/5">
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-center text-white tracking-tight">${t.featuresTitle}</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="flex gap-4 items-start">
+                                <div class="p-3 bg-brand-500/10 rounded-xl text-brand-400 text-lg"><i class="fa-solid fa-server"></i></div>
+                                <div>
+                                    <h4 class="text-base font-bold text-white mb-1">${t.feat1}</h4>
+                                    <p class="text-xs text-slate-400 leading-relaxed">${t.feat1Desc}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="p-3 bg-brand-500/10 rounded-xl text-brand-400 text-lg"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                                <div>
+                                    <h4 class="text-base font-bold text-white mb-1">${t.feat2}</h4>
+                                    <p class="text-xs text-slate-400 leading-relaxed">${t.feat2Desc}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="p-3 bg-brand-500/10 rounded-xl text-brand-400 text-lg"><i class="fa-solid fa-network-wired"></i></div>
+                                <div>
+                                    <h4 class="text-base font-bold text-white mb-1">${t.feat3}</h4>
+                                    <p class="text-xs text-slate-400 leading-relaxed">${t.feat3Desc}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+                ${renderFooter()}
+            `;
+            attachGlobalHeaderEventBindings();
+        }
+
+        // AUTHENTICATION VIEW GATEWAY INTERACTIVE MODAL COMPONENT
+        function renderAuthView(forceRegisterMode = false) {
+            const t = i18n[currentLang];
+            const content = document.getElementById('view-content');
+            let isRegisterMode = forceRegisterMode;
+
+            function drawLayout() {
+                content.innerHTML = `
+                    ${renderHeader()}
+                    <div class="max-w-md mx-auto px-4 py-16 md:py-24 fade-in">
+                        <div class="glass p-8 rounded-2xl border-white/10 shadow-2xl shadow-black/50 flex flex-col gap-6">
+                            <div class="text-center">
+                                <i class="fa-solid fa-shield-halved text-4xl text-brand-500 mb-3"></i>
+                                <h2 class="text-xl font-bold text-white" id="auth-title-label">${isRegisterMode ? t.ctaStart : t.ctaLogin}</h2>
+                            </div>
+                            <form id="auth-submission-form" class="flex flex-col gap-4">
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-semibold text-slate-400 px-1">${t.email}</label>
+                                    <input type="email" id="auth-email-input" required class="glass-input text-sm text-white px-4 py-3 rounded-xl w-full" placeholder="you@example.com">
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-semibold text-slate-400 px-1">${t.password}</label>
+                                    <input type="password" id="auth-pwd-input" minlength="6" required class="glass-input text-sm text-white px-4 py-3 rounded-xl w-full" placeholder="••••••••">
+                                </div>
+                                <button type="submit" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-sm py-3.5 rounded-xl transition w-full shadow-lg shadow-brand-600/10 mt-2">
+                                    ${t.submitAuth}
+                                </button>
+                            </form>
+                            <button id="auth-toggle-view-btn" class="text-xs text-brand-400 hover:text-brand-300 text-center transition font-medium">
+                                ${isRegisterMode ? t.authToggleToLogin : t.authToggleToRegister}
+                            </button>
+                        </div>
+                    </div>
+                    ${renderFooter()}
+                `;
+                attachGlobalHeaderEventBindings();
+
+                // Form submission implementation handlers
+                document.getElementById('auth-submission-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('auth-email-input').value.trim();
+                    const password = document.getElementById('auth-pwd-input').value;
+
+                    try {
+                        if (isRegisterMode) {
+                            await createUserWithEmailAndPassword(auth, email, password);
+                            showToast("Account ecosystem created successfully!", "success");
+                        } else {
+                            await signInWithEmailAndPassword(auth, email, password);
+                            showToast("Identity verification successful!", "success");
+                        }
+                        window.navigateToRoute('dashboard');
+                    } catch (err) {
+                        showToast(err.message, "error");
+                    }
+                });
+
+                document.getElementById('auth-toggle-view-btn').addEventListener('click', () => {
+                    isRegisterMode = !isRegisterMode;
+                    drawLayout();
+                });
+            }
+            drawLayout();
+        }
+
+        // 3. USER DASHBOARD VIEW COMPONENT & STRATEGY ROOM CHAT
+        async function renderDashboardView(openChatAutomatically = false) {
+            const t = i18n[currentLang];
+            const content = document.getElementById('view-content');
+            if (!currentUser) { renderAuthView(); return; }
+
+            // Base Structural Dashboard Grid Wrapper Blueprint
+            content.innerHTML = `
+                ${renderHeader()}
+                <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 min-h-[calc(100vh-140px)]">
+                    <section class="lg:col-span-2 flex flex-col gap-6">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                                <i class="fa-solid fa-cubes text-brand-500"></i> ${t.prevProjects}
+                            </h2>
+                        </div>
+                        <div id="projects-grid-root" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="col-span-2 text-slate-400 text-sm py-12 text-center glass rounded-xl border-dashed border-white/10"><i class="fa-solid fa-circle-notch animate-spin text-lg"></i></div>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <button id="trigger-chat-btn" class="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-extrabold text-sm py-4 rounded-xl shadow-xl shadow-brand-600/10 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-comment-dots"></i> ${t.ctaStart} (ابدأ بعملك عبر الإنترنت)
+                            </button>
+                        </div>
+                    </section>
+
+                    <section id="chat-section-container" class="glass rounded-2xl border-white/10 flex flex-col overflow-hidden h-[600px] lg:h-auto ${openChatAutomatically ? 'ring-2 ring-brand-500' : ''}">
+                        <div class="p-4 border-b border-white/10 flex items-center gap-3 bg-white/5">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <span class="text-xs font-bold text-white tracking-wide uppercase">${t.chatTitle}</span>
+                        </div>
+                        <div id="chat-messages-stream" class="flex-grow overflow-y-auto p-4 flex flex-col gap-3 text-xs"></div>
+                        <form id="chat-message-dispatch-form" class="p-3 border-t border-white/10 bg-slate-900/50 flex gap-2">
+                            <input type="text" id="chat-raw-input" autocomplete="off" required class="glass-input text-xs px-3 py-2.5 rounded-xl flex-grow text-white" placeholder="${t.chatPlaceholder}">
+                            <button type="submit" class="w-10 h-10 rounded-xl bg-brand-600 hover:bg-brand-500 flex items-center justify-center text-white transition shrink-0">
+                                <i class="fa-solid fa-paper-plane text-xs"></i>
+                            </button>
+                        </form>
+                    </section>
+                </main>
+                ${renderFooter()}
+            `;
+            attachGlobalHeaderEventBindings();
+
+            // Bind Event Listeners for UI Actions inside the dashboard
+            document.getElementById('trigger-chat-btn').addEventListener('click', () => {
+                document.getElementById('chat-section-container').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('chat-section-container').classList.add('ring-2', 'ring-brand-500');
+                document.getElementById('chat-raw-input').focus();
+            });
+
+            // 1. Core Runtime Sync Logic: Populate User Subdomain Grid Projects
+            try {
+                const projectsQuery = query(collection(db, "projects"), where("uid", "==", currentUser.uid));
+                const projectsSnapshot = await getDocs(projectsQuery);
+                const gridRoot = document.getElementById('projects-grid-root');
+                
+                if (projectsSnapshot.empty) {
+                    gridRoot.innerHTML = `<div class="col-span-2 text-slate-400 text-xs py-12 px-6 text-center glass rounded-xl border border-dashed border-white/10 leading-relaxed">${t.noProjects}</div>`;
+                } else {
+                    gridRoot.innerHTML = '';
+                    projectsSnapshot.forEach(docSnap => {
+                        const project = docSnap.data();
+                        const pCard = document.createElement('div');
+                        pCard.className = "glass p-5 rounded-xl border border-white/5 flex flex-col justify-between items-start gap-4 hover:border-brand-500/30 transition group";
+                        // Construct dynamic link checking engine
+                        const projectURL = window.location.hostname.includes('localhost') 
+                            ? `?subdomain=${project.projectName}` 
+                            : `${window.location.protocol}//${project.projectName}.${window.location.hostname}`;
+                        
+                        pCard.innerHTML = `
+                            <div class="w-full">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-black uppercase text-brand-400 tracking-wider">${project.projectName}</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 font-semibold border border-emerald-500/20">Active</span>
+                                </div>
+                                <h4 class="text-sm font-bold text-white mb-1 truncate">${project.projectName}.sultan.com</h4>
+                            </div>
+                            <a href="${projectURL}" target="_blank" class="text-[11px] font-bold text-indigo-400 group-hover:text-indigo-300 flex items-center gap-1 mt-2">
+                                Launch Project Platform <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                            </a>
+                        `;
+                        gridRoot.appendChild(pCard);
+                    });
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('projects-grid-root').innerHTML = `<p class="text-red-400 text-xs">Error parsing live nodes infrastructure.</p>`;
+            }
+
+            // 2. Realtime Chat Stream Execution Pipeline setup
+            const userChatRef = collection(db, "chats", currentUser.uid, "messages");
+            const chatQueryOrdered = query(userChatRef, orderBy("timestamp", "asc"));
+
+            if(unsubChat) unsubChat(); // Guard logic pattern to tear down running streams
+
+            const streamContainer = document.getElementById('chat-messages-stream');
+
+            unsubChat = onSnapshot(chatQueryOrdered, (snapshot) => {
+                streamContainer.innerHTML = '';
+                if(snapshot.empty) {
+                    streamContainer.innerHTML = `<div class="text-slate-500 text-center italic py-8">Initialize connection protocol by typing an idea below...</div>`;
+                }
+                snapshot.forEach(docSnap => {
+                    const msg = docSnap.data();
+                    const isMe = msg.senderId === currentUser.uid;
+                    const bubbleWrapper = document.createElement('div');
+                    bubbleWrapper.className = `flex w-full ${isMe ? 'justify-end' : 'justify-start'}`;
+                    
+                    bubbleWrapper.innerHTML = `
+                        <div class="max-w-[85%] rounded-xl px-3.5 py-2.5 shadow-md leading-relaxed ${
+                            isMe 
+                            ? 'bg-gradient-to-br from-brand-700 to-indigo-700 text-white rounded-br-none' 
+                            : 'glass border-white/10 text-slate-200 rounded-bl-none'
+                        }">
+                            <p class="break-words">${msg.text}</p>
+                            <span class="block text-[8px] opacity-40 text-right mt-1">${msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...'}</span>
+                        </div>
+                    `;
+                    streamContainer.appendChild(bubbleWrapper);
+                });
+                streamContainer.scrollTop = streamContainer.scrollHeight;
+            }, (error) => {
+                console.error("Chat sync stream disconnect error:", error);
+            });
+
+            // Handle Messaging Form Form Dispatch event binds
+            document.getElementById('chat-message-dispatch-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const textInput = document.getElementById('chat-raw-input');
+                const textValue = textInput.value.trim();
+                if(!textValue) return;
+
+                try {
+                    textInput.value = ''; // Instantly clear input for optimized feedback loops
+                    await addDoc(userChatRef, {
+                        senderId: currentUser.uid,
+                        text: textValue,
+                        timestamp: serverTimestamp()
+                    });
+                } catch (err) {
+                    showToast("Failed to dispatch stream payload data.", "error");
+                }
+            });
+        }
+
+        // GLASSMORPHISM ULTRA MODERN 404 DEPLOYMENT ERROR TEMPLATE
+        function render404View() {
+            const t = i18n[currentLang];
+            const content = document.getElementById('view-content');
+            content.innerHTML = `
+                <div class="min-h-screen flex flex-col items-center justify-center p-4 text-center">
+                    <div class="glass p-8 md:p-12 rounded-3xl border-white/10 shadow-2xl max-w-xl flex flex-col items-center gap-6 fade-in relative">
+                        <div class="absolute -top-12 w-24 h-24 rounded-2xl bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-4xl shadow-xl shadow-red-500/20">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h1 class="text-2xl md:text-4xl font-black text-white mt-8 tracking-tight">${t.error404Title}</h1>
+                        <p class="text-sm text-slate-400 leading-relaxed">${t.error404Desc}</p>
+                        <button onclick="window.location.href='${window.location.protocol}//sultan.com'" class="mt-2 bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold text-xs px-6 py-3 rounded-xl transition">
+                            <i class="fa-solid fa-house-signal"></i> ${t.backHome}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Global Dynamic Header Navigation Callback Binds Engine
+        function attachGlobalHeaderEventBindings() {
+            // Language Toggle click logic binding
+            const langBtn = document.getElementById('lang-switch-btn');
+            if (langBtn) {
+                langBtn.addEventListener('click', () => {
+                    currentLang = currentLang === 'en' ? 'ar' : 'en';
+                    localStorage.setItem('lang', currentLang);
+                    updateLayoutDirection();
+                    window.refreshCurrentRoute();
+                });
+            }
+
+            // Central Navbar Login/Logout action trigger processing switch
+            const authBtn = document.getElementById('auth-action-btn');
+            if (authBtn) {
+                authBtn.addEventListener('click', async () => {
+                    if (currentUser) {
+                        try {
+                            if(unsubChat) { unsubChat(); unsubChat = null; }
+                            await signOut(auth);
+                            showToast("Identity session cleared cleanly.");
+                            window.navigateToRoute('landing');
+                        } catch (err) {
+                            showToast("Error processing dynamic session revocation.", "error");
+                        }
+                    } else {
+                        window.navigateToRoute('auth');
+                    }
+                });
+            }
+        }
+
+        // --- GLOBAL CENTRAL ROUTING MANAGEMENT ENGINE ---
+        let currentRouteState = 'landing'; 
+        let routeArgModifier = false;
+
+        window.navigateToRoute = function(routeName, argModifier = false) {
+            currentRouteState = routeName;
+            routeArgModifier = argModifier;
+            window.refreshCurrentRoute();
+        };
+
+        window.refreshCurrentRoute = function() {
+            // Apply Layout Direction on every repaint view state cycle
+            updateLayoutDirection();
+            
+            switch (currentRouteState) {
+                case 'landing':
+                    renderLandingView();
+                    break;
+                case 'auth':
+                    renderAuthView();
+                    break;
+                case 'dashboard':
+                    renderDashboardView(routeArgModifier);
+                    break;
+                default:
+                    renderLandingView();
+            }
+        };
+
+        // Initialize and Bootstrapping Orchestrator Execution Flow
+        async function runApplicationBoot() {
+            updateLayoutDirection();
+            
+            // Check dynamic domain query layers first. Break execution line if intercept happens.
+            const traceIntercepted = await routeSubdomainsAndContent();
+            if (traceIntercepted) return;
+
+            // Monitor Auth Session Authentication Status state transitions
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                // Preserve dashboard visibility if currently actively browsing dashboard
+                if (currentRouteState === 'dashboard' && !user) {
+                    currentRouteState = 'landing';
+                }
+                window.refreshCurrentRoute();
+            });
+        }
+
+        // Kickoff Core Process
+        runApplicationBoot();
+
+    </script>
+</body>
+</html>
